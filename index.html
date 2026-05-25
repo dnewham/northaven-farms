@@ -2,103 +2,148 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>Northaven Farms Recipe Book</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Lato:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Lato', sans-serif; background: #f4f1e8; min-height: 100vh; color: #2d3a1e; }
-  .app-header { background: #2d4a1e; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .app-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #e8f0d8; letter-spacing: 0.3px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Lato', sans-serif; background: #f4f1e8; min-height: 100vh; color: #2d3a1e; -webkit-text-size-adjust: 100%; }
+
+  .app-header { background: #2d4a1e; padding: 16px 20px; padding-top: max(16px, env(safe-area-inset-top)); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .app-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #e8f0d8; letter-spacing: 0.3px; }
   .app-title span { color: #9dc854; font-style: italic; }
-  .header-actions { display: flex; align-items: center; gap: 10px; }
-  .btn-outline { background: transparent; border: 1.5px solid #9dc854; color: #9dc854; padding: 7px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; }
-  .btn-outline:hover { background: #9dc854; color: #1a2e0a; }
-  .btn-primary { background: #9dc854; border: none; color: #1a2e0a; padding: 7px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-  .btn-primary:hover { background: #b8d96f; }
-  .garden-view { padding: 28px; }
-  .section-label { font-family: 'Playfair Display', serif; font-size: 15px; color: #5c7a3a; margin-bottom: 20px; letter-spacing: 0.5px; }
-  .veggie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
-  .veggie-tile { background: #ffffff; border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; border: 1.5px solid #d8e8c0; position: relative; }
-  .veggie-tile:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(45,74,30,0.18); border-color: #9dc854; }
+  .header-actions { display: flex; align-items: center; gap: 8px; }
+  .btn-outline { background: transparent; border: 1.5px solid #9dc854; color: #9dc854; padding: 9px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-size: 13px; cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+  .btn-outline:active { background: #9dc854; color: #1a2e0a; }
+  .btn-primary { background: #9dc854; border: none; color: #1a2e0a; padding: 9px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+  .btn-primary:active { background: #b8d96f; }
+
+  /* GARDEN GRID */
+  .garden-view { padding: 20px 16px; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+  .section-label { font-family: 'Playfair Display', serif; font-size: 14px; color: #5c7a3a; margin-bottom: 16px; letter-spacing: 0.3px; }
+  .veggie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+
+  .veggie-tile { background: #ffffff; border-radius: 14px; overflow: hidden; cursor: pointer; border: 1.5px solid #d8e8c0; position: relative; transition: transform 0.15s, box-shadow 0.15s; }
+  .veggie-tile:active { transform: scale(0.97); }
+  @media (hover: hover) { .veggie-tile:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(45,74,30,0.18); border-color: #9dc854; } }
   .veggie-photo-wrap { position: relative; overflow: hidden; height: 120px; background: #c8dca8; }
-  .veggie-photo { width: 100%; height: 120px; object-fit: cover; display: block; transition: transform 0.3s; }
-  .veggie-tile:hover .veggie-photo { transform: scale(1.05); }
-  .veggie-badge { position: absolute; top: 8px; right: 8px; background: #2d4a1e; color: #9dc854; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; z-index: 2; }
-  .veggie-info { padding: 10px 12px 30px; }
+  .veggie-photo { width: 100%; height: 120px; object-fit: cover; display: block; }
+  .veggie-badge { position: absolute; top: 8px; left: 8px; background: #2d4a1e; color: #9dc854; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; z-index: 2; }
+  .veggie-info { padding: 10px 12px 12px; }
   .veggie-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #2d3a1e; margin-bottom: 2px; }
   .veggie-count { font-size: 11px; color: #7a9a5a; }
-  .nutrition-btn { position: absolute; bottom: 8px; right: 8px; width: 22px; height: 22px; background: #2d4a1e; color: #9dc854; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; border: none; font-family: 'Lato', sans-serif; }
-  .nutrition-btn:hover { background: #4a7a2a; }
-  .nutrition-panel { display: none; position: absolute; bottom: 36px; right: 6px; width: 190px; background: #2d4a1e; border-radius: 10px; padding: 12px 14px; z-index: 20; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
-  .nutrition-panel.show { display: block; }
-  .nutrition-panel h4 { font-family: 'Playfair Display', serif; font-size: 13px; color: #9dc854; margin-bottom: 8px; font-weight: 600; }
-  .nut-row { display: flex; justify-content: space-between; font-size: 11px; color: #c8dca8; padding: 2px 0; border-bottom: 0.5px solid rgba(157,200,84,0.2); }
-  .nut-row:last-child { border-bottom: none; }
-  .nut-val { font-weight: 700; color: #e8f0d8; }
+
+  /* NUTRITION BUTTON ON TILE */
+  .nutrition-btn {
+    position: absolute; bottom: 8px; right: 8px;
+    width: 32px; height: 32px;
+    background: #2d4a1e; color: #9dc854;
+    border-radius: 50%; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 5; border: none;
+    font-family: 'Lato', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nutrition-btn:active { background: #4a7a2a; }
+
+  /* NUTRITION MODAL (replaces popup for clarity) */
+  .nut-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(20,35,10,0.55); z-index: 300; align-items: flex-end; justify-content: center; }
+  .nut-modal-overlay.show { display: flex; }
+  .nut-modal {
+    background: #f4f1e8; border-radius: 20px 20px 0 0;
+    padding: 24px 24px max(24px, env(safe-area-inset-bottom));
+    width: 100%; max-width: 540px;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .nut-modal-handle { width: 40px; height: 4px; background: #c8d8a8; border-radius: 2px; margin: 0 auto 18px; }
+  .nut-modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #2d3a1e; margin-bottom: 6px; }
+  .nut-modal-blurb { font-size: 13px; color: #5c7a3a; line-height: 1.5; margin-bottom: 18px; }
+  .nut-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px; }
+  .nut-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 12px 14px; }
+  .nut-card-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: #3d6428; }
+  .nut-card-label { font-size: 11px; color: #7a9a5a; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .nut-per { font-size: 11px; color: #9aaa8a; text-align: right; margin-top: 4px; }
+  .nut-close-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 12px; padding: 14px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; }
+
+  /* DETAIL VIEW */
   .detail-view { display: none; }
-  .back-bar { background: #2d4a1e; padding: 12px 20px; position: sticky; top: 62px; z-index: 90; }
-  .back-btn-big { background: #9dc854; color: #1a2e0a; border: none; border-radius: 20px; padding: 9px 20px; font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
-  .back-btn-big:hover { background: #b8d96f; }
+  .back-bar { background: #2d4a1e; padding: 12px 16px; position: sticky; top: 56px; z-index: 90; }
+  .back-btn-big { background: #9dc854; color: #1a2e0a; border: none; border-radius: 20px; padding: 10px 20px; font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+  .back-btn-big:active { background: #b8d96f; }
   .detail-hero { position: relative; height: 220px; overflow: hidden; background: #c8dca8; }
   .detail-hero-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .detail-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,40,10,0.88) 0%, rgba(20,40,10,0.15) 60%); display: flex; align-items: flex-end; padding: 20px 28px; }
-  .detail-hero-text h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: #e8f0d8; font-weight: 600; }
+  .detail-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,40,10,0.88) 0%, rgba(20,40,10,0.15) 60%); display: flex; align-items: flex-end; padding: 20px 20px; }
+  .detail-hero-text h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: #e8f0d8; font-weight: 600; }
   .detail-hero-text p { font-size: 13px; color: #9dc854; margin-top: 4px; }
-  .detail-body { padding: 24px 28px; }
-  .nutrition-strip { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px 20px; margin-bottom: 24px; display: flex; }
-  .nut-stat { flex: 1; text-align: center; padding: 0 8px; border-right: 1px solid #d8e8c0; }
+  .detail-body { padding: 20px 16px; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+
+  /* NUTRITION STRIP ON DETAIL */
+  .nutrition-strip-wrap { margin-bottom: 20px; }
+  .nutrition-strip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .nutrition-strip-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: #2d3a1e; }
+  .nutrition-strip { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 14px 16px; display: flex; gap: 0; }
+  .nut-stat { flex: 1; text-align: center; padding: 0 6px; border-right: 1px solid #d8e8c0; }
   .nut-stat:last-child { border-right: none; }
-  .nut-stat-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #3d6428; }
-  .nut-stat-label { font-size: 10px; color: #7a9a5a; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .nut-stat-val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #3d6428; }
+  .nut-stat-label { font-size: 9px; color: #7a9a5a; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .nutrition-blurb { font-size: 13px; color: #5c7a3a; line-height: 1.5; margin-top: 10px; background: #f0f4e8; border-radius: 10px; padding: 10px 14px; border: 1px solid #d8e8c0; }
+
   .recipes-heading { font-family: 'Playfair Display', serif; font-size: 18px; color: #2d3a1e; margin-bottom: 14px; font-weight: 600; }
-  .recipe-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px 18px; margin-bottom: 12px; transition: border-color 0.2s, transform 0.15s; cursor: pointer; }
-  .recipe-card:hover { border-color: #9dc854; transform: translateX(3px); }
-  .recipe-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .recipe-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; min-height: 44px; }
+  .recipe-card:active { border-color: #9dc854; background: #f8fdf0; }
+  @media (hover: hover) { .recipe-card:hover { border-color: #9dc854; transform: translateX(3px); } }
+  .recipe-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
   .recipe-card-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #2d3a1e; }
-  .recipe-link-icon { font-size: 14px; color: #9dc854; flex-shrink: 0; }
+  .recipe-link-icon { font-size: 16px; color: #9dc854; flex-shrink: 0; }
   .recipe-shared-by { font-size: 11px; color: #7a9a5a; margin-top: 4px; }
   .no-recipes { background: #f0f4e8; border-radius: 12px; padding: 20px; text-align: center; color: #7a9a5a; font-size: 14px; border: 1.5px dashed #c0d890; }
-  .add-recipe-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 10px; padding: 12px 20px; font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; transition: background 0.2s; }
-  .add-recipe-btn:hover { background: #3d6428; }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(20,35,10,0.6); z-index: 200; align-items: center; justify-content: center; }
+  .add-recipe-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 12px; padding: 16px 20px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; min-height: 52px; }
+  .add-recipe-btn:active { background: #3d6428; }
+
+  /* MODALS */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(20,35,10,0.6); z-index: 200; align-items: flex-end; justify-content: center; }
   .modal-overlay.show { display: flex; }
-  .modal { background: #f4f1e8; border-radius: 16px; padding: 28px; width: 90%; max-width: 480px; max-height: 80vh; overflow-y: auto; }
+  .modal { background: #f4f1e8; border-radius: 20px 20px 0 0; padding: 28px 24px max(28px, env(safe-area-inset-bottom)); width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; }
   .modal h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #2d3a1e; margin-bottom: 20px; font-weight: 600; }
-  .form-group { margin-bottom: 14px; }
-  .form-group label { display: block; font-size: 12px; font-weight: 700; color: #5c7a3a; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #c0d890; background: #fff; font-family: 'Lato', sans-serif; font-size: 14px; color: #2d3a1e; outline: none; transition: border-color 0.2s; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 700; color: #5c7a3a; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 13px 14px; border-radius: 10px; border: 1.5px solid #c0d890; background: #fff; font-family: 'Lato', sans-serif; font-size: 16px; color: #2d3a1e; outline: none; -webkit-appearance: none; }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #9dc854; }
-  .form-group textarea { height: 100px; resize: vertical; }
-  .radio-group { display: flex; gap: 16px; }
-  .radio-label { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #2d3a1e; cursor: pointer; }
+  .form-group textarea { height: 110px; resize: none; font-size: 15px; }
+  .radio-group { display: flex; gap: 12px; }
+  .radio-label { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #2d3a1e; cursor: pointer; padding: 10px 0; min-height: 44px; }
+  .radio-label input[type="radio"] { width: 20px; height: 20px; accent-color: #2d4a1e; }
   .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-  .btn-cancel { flex: 1; background: transparent; border: 1.5px solid #c0d890; color: #5c7a3a; padding: 10px; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 14px; cursor: pointer; }
-  .btn-submit { flex: 2; background: #2d4a1e; border: none; color: #9dc854; padding: 10px; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
-  .btn-submit:hover { background: #3d6428; }
-  .username-bar { background: #e8f2d4; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: #3d6428; }
-  .admin-panel { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 20px; margin-bottom: 20px; }
-  .admin-panel h4 { font-family: 'Playfair Display', serif; font-size: 16px; color: #2d3a1e; margin-bottom: 14px; font-weight: 600; }
-  .pending-user-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid #e8f0d8; }
+  .btn-cancel { flex: 1; background: transparent; border: 1.5px solid #c0d890; color: #5c7a3a; padding: 14px; border-radius: 12px; font-family: 'Lato', sans-serif; font-size: 15px; cursor: pointer; min-height: 52px; }
+  .btn-submit { flex: 2; background: #2d4a1e; border: none; color: #9dc854; padding: 14px; border-radius: 12px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 52px; }
+  .btn-submit:active { background: #3d6428; }
+  .username-bar { background: #e8f2d4; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 14px; color: #3d6428; }
+
+  .admin-panel { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px; margin-bottom: 20px; }
+  .admin-panel h4 { font-family: 'Playfair Display', serif; font-size: 16px; color: #2d3a1e; margin-bottom: 12px; font-weight: 600; }
+  .pending-user-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid #e8f0d8; gap: 10px; }
   .pending-user-row:last-child { border-bottom: none; }
-  .pending-user-name { font-size: 14px; color: #2d3a1e; font-weight: 700; }
-  .pending-actions { display: flex; gap: 8px; }
-  .btn-approve { background: #2d4a1e; color: #9dc854; border: none; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; }
-  .btn-deny { background: transparent; color: #c05030; border: 1.5px solid #c05030; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; }
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #2d4a1e; color: #9dc854; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 700; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+  .pending-user-name { font-size: 15px; color: #2d3a1e; font-weight: 700; }
+  .pending-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn-approve { background: #2d4a1e; color: #9dc854; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; min-height: 44px; }
+  .btn-deny { background: transparent; color: #c05030; border: 1.5px solid #c05030; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; min-height: 44px; }
+
+  .toast { position: fixed; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: #2d4a1e; color: #9dc854; padding: 13px 24px; border-radius: 24px; font-size: 14px; font-weight: 700; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
-  @media (max-width: 480px) {
-    .app-header { padding: 14px 16px; }
-    .app-title { font-size: 15px; }
-    .garden-view { padding: 14px; }
-    .veggie-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-    .detail-body { padding: 16px; }
-    .back-bar { top: 55px; }
-    .nutrition-strip { flex-wrap: wrap; }
-    .nut-stat { min-width: 50%; border-right: none; border-bottom: 1px solid #d8e8c0; padding: 6px 0; }
-    .detail-hero { height: 160px; }
-    .detail-hero-text h2 { font-size: 22px; }
+
+  @media (min-width: 600px) {
+    .app-header { padding: 18px 28px; }
+    .app-title { font-size: 20px; }
+    .garden-view { padding: 28px; }
+    .veggie-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+    .modal-overlay, .nut-modal-overlay { align-items: center; }
+    .modal, .nut-modal { border-radius: 16px; max-height: 80vh; }
+    .back-bar { top: 62px; }
+    .detail-body { padding: 24px 28px; }
   }
 </style>
 </head>
@@ -125,19 +170,32 @@
   <div class="detail-body" id="detailBody"></div>
 </div>
 
+<!-- Nutrition Modal (bottom sheet) -->
+<div class="nut-modal-overlay" id="nutModal">
+  <div class="nut-modal" id="nutModalContent">
+    <div class="nut-modal-handle"></div>
+    <div class="nut-modal-title" id="nutModalTitle"></div>
+    <div class="nut-modal-blurb" id="nutModalBlurb"></div>
+    <div class="nut-modal-grid" id="nutModalGrid"></div>
+    <div class="nut-per" id="nutModalPer"></div>
+    <button class="nut-close-btn" id="nutCloseBtn">Done</button>
+  </div>
+</div>
+
+<!-- Sign In Modal -->
 <div class="modal-overlay" id="loginModal">
   <div class="modal">
     <h3>🌱 Welcome to Northaven Farms</h3>
     <div class="form-group">
       <label>Your Username</label>
-      <input type="text" id="usernameInput" placeholder="e.g. Carolyn, Jackie, Lauren..."/>
+      <input type="text" id="usernameInput" placeholder="e.g. Carolyn, Jackie, Lauren..." autocorrect="off" autocapitalize="none"/>
     </div>
     <div class="form-group" id="passwordGroup" style="display:none;">
       <label>Password</label>
       <input type="password" id="passwordInput" placeholder="Enter password"/>
     </div>
-    <p style="font-size:12px;color:#7a9a5a;margin-bottom:12px;">You can browse anonymously, but a username is required to add recipes. New usernames need Denton's approval.</p>
-    <div id="loginError" style="display:none;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px;"></div>
+    <p style="font-size:13px;color:#7a9a5a;margin-bottom:12px;line-height:1.5;">You can browse anonymously, but a username is required to add recipes. New usernames need Denton's approval.</p>
+    <div id="loginError" style="display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:12px;line-height:1.5;"></div>
     <div class="modal-actions">
       <button class="btn-cancel" id="loginCancel">Browse anonymously</button>
       <button class="btn-submit" id="loginSubmit">Continue</button>
@@ -145,6 +203,7 @@
   </div>
 </div>
 
+<!-- Add Recipe Modal -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <h3>🥬 Share a Recipe</h3>
@@ -166,7 +225,7 @@
     </div>
     <div class="form-group" id="linkGroup">
       <label>Recipe URL</label>
-      <input type="url" id="recipeUrl" placeholder="https://..."/>
+      <input type="url" id="recipeUrl" placeholder="https://..." inputmode="url"/>
     </div>
     <div class="form-group" id="textGroup" style="display:none;">
       <label>Recipe Text</label>
@@ -200,25 +259,63 @@ const ADMIN_USER = 'Denton';
 const ADMIN_PASS = 'admin';
 
 const veggieData = [
-  { id:'beans',       name:'Beans',         img:'images/beans.jpg',        nutrition:{calories:'31 kcal', protein:'2g',   fiber:'3.4g', vitC:'12mg',  per:'100g'} },
-  { id:'cantaloupe',  name:'Cantaloupe',    img:'images/cantaloupe.jpg',   nutrition:{calories:'34 kcal', protein:'0.8g', fiber:'0.9g', vitC:'37mg',  per:'100g'} },
-  { id:'carrot',      name:'Carrot',        img:'images/carrot.jpg',       nutrition:{calories:'41 kcal', protein:'0.9g', fiber:'2.8g', vitC:'6mg',   per:'100g'} },
-  { id:'corn',        name:'Corn',          img:'images/corn.jpg',         nutrition:{calories:'86 kcal', protein:'3.2g', fiber:'2.4g', vitC:'7mg',   per:'100g'} },
-  { id:'cucumber',    name:'Cucumber',      img:'images/cucumber.jpg',     nutrition:{calories:'16 kcal', protein:'0.7g', fiber:'0.5g', vitC:'3mg',   per:'100g'} },
-  { id:'leeks',       name:'Leeks',         img:'images/leeks.jpg',        nutrition:{calories:'61 kcal', protein:'1.5g', fiber:'1.8g', vitC:'12mg',  per:'100g'} },
-  { id:'lettuce',     name:'Lettuce',       img:'images/lettuce.jpg',      nutrition:{calories:'15 kcal', protein:'1.4g', fiber:'1.3g', vitC:'9mg',   per:'100g'} },
-  { id:'okra',        name:'Okra',          img:'images/okra.jpg',         nutrition:{calories:'33 kcal', protein:'1.9g', fiber:'3.2g', vitC:'23mg',  per:'100g'} },
-  { id:'onion',       name:'Onion',         img:'images/onion.jpg',        nutrition:{calories:'40 kcal', protein:'1.1g', fiber:'1.7g', vitC:'8mg',   per:'100g'} },
-  { id:'hotpepper',   name:'Hot Peppers',   img:'images/hotpepper.jpg',    nutrition:{calories:'40 kcal', protein:'1.9g', fiber:'1.5g', vitC:'144mg', per:'100g'} },
-  { id:'sweetpepper', name:'Sweet Peppers', img:'images/sweetpepper.jpg',  nutrition:{calories:'31 kcal', protein:'1g',   fiber:'2.1g', vitC:'128mg', per:'100g'} },
-  { id:'radish',      name:'Radish',        img:'images/radish.jpg',       nutrition:{calories:'16 kcal', protein:'0.7g', fiber:'1.6g', vitC:'15mg',  per:'100g'} },
-  { id:'spinach',     name:'Spinach',       img:'images/spinach.jpg',      nutrition:{calories:'23 kcal', protein:'2.9g', fiber:'2.2g', vitC:'28mg',  per:'100g'} },
-  { id:'strawberry',  name:'Strawberry',    img:'images/strawberry.jpg',   nutrition:{calories:'32 kcal', protein:'0.7g', fiber:'2g',   vitC:'59mg',  per:'100g'} },
-  { id:'squash',      name:'Summer Squash', img:'images/summersquash.jpg', nutrition:{calories:'20 kcal', protein:'1.5g', fiber:'1.1g', vitC:'19mg',  per:'100g'} },
-  { id:'tomato',      name:'Tomato',        img:'images/tomato.jpg',       nutrition:{calories:'18 kcal', protein:'0.9g', fiber:'1.2g', vitC:'14mg',  per:'100g'} },
-  { id:'turnip',      name:'Turnip',        img:'images/turnip.jpg',       nutrition:{calories:'28 kcal', protein:'0.9g', fiber:'1.8g', vitC:'21mg',  per:'100g'} },
-  { id:'watermelon',  name:'Watermelon',    img:'images/watermelon.jpg',   nutrition:{calories:'30 kcal', protein:'0.6g', fiber:'0.4g', vitC:'8mg',   per:'100g'} },
-  { id:'zucchini',    name:'Zucchini',      img:'images/zucchini.jpg',     nutrition:{calories:'17 kcal', protein:'1.2g', fiber:'1.1g', vitC:'18mg',  per:'100g'} }
+  { id:'beans', name:'Beans', img:'images/beans.jpg',
+    nutrition:{calories:'31 kcal',protein:'2g',fiber:'3.4g',vitC:'12mg',per:'100g'},
+    blurb:'Green beans are a great source of vitamins C and K, and their high fiber content supports healthy digestion. They\'re low in calories while delivering meaningful amounts of folate and iron.' },
+  { id:'cantaloupe', name:'Cantaloupe', img:'images/cantaloupe.jpg',
+    nutrition:{calories:'34 kcal',protein:'0.8g',fiber:'0.9g',vitC:'37mg',per:'100g'},
+    blurb:'Cantaloupe is loaded with vitamin C and beta-carotene, a powerful antioxidant the body converts to vitamin A. Its high water content also makes it excellent for hydration on hot days.' },
+  { id:'carrot', name:'Carrot', img:'images/carrot.jpg',
+    nutrition:{calories:'41 kcal',protein:'0.9g',fiber:'2.8g',vitC:'6mg',per:'100g'},
+    blurb:'Carrots are one of the richest sources of beta-carotene, which supports eye health and immune function. Their natural fiber also helps promote healthy blood sugar levels.' },
+  { id:'corn', name:'Corn', img:'images/corn.jpg',
+    nutrition:{calories:'86 kcal',protein:'3.2g',fiber:'2.4g',vitC:'7mg',per:'100g'},
+    blurb:'Sweet corn provides a good balance of protein and fiber among vegetables, and contains lutein and zeaxanthin which support long-term eye health. It\'s also a natural source of B vitamins.' },
+  { id:'cucumber', name:'Cucumber', img:'images/cucumber.jpg',
+    nutrition:{calories:'16 kcal',protein:'0.7g',fiber:'0.5g',vitC:'3mg',per:'100g'},
+    blurb:'Cucumbers are about 95% water, making them one of the most hydrating foods you can eat. They\'re also rich in antioxidants including flavonoids and tannins that help reduce inflammation.' },
+  { id:'leeks', name:'Leeks', img:'images/leeks.jpg',
+    nutrition:{calories:'61 kcal',protein:'1.5g',fiber:'1.8g',vitC:'12mg',per:'100g'},
+    blurb:'Leeks belong to the allium family and contain kaempferol, an antioxidant linked to heart health. They\'re also a good source of folate, vitamin K, and prebiotic fiber that feeds beneficial gut bacteria.' },
+  { id:'lettuce', name:'Lettuce', img:'images/lettuce.jpg',
+    nutrition:{calories:'15 kcal',protein:'1.4g',fiber:'1.3g',vitC:'9mg',per:'100g'},
+    blurb:'Lettuce is exceptionally low in calories while providing vitamin K for bone health and folate for cell function. Darker varieties like arugula and romaine pack significantly more nutrients than iceberg.' },
+  { id:'okra', name:'Okra', img:'images/okra.jpg',
+    nutrition:{calories:'33 kcal',protein:'1.9g',fiber:'3.2g',vitC:'23mg',per:'100g'},
+    blurb:'Okra is a standout for its soluble fiber content, which helps lower cholesterol and stabilize blood sugar. It\'s also rich in vitamin C, folate, and magnesium — an impressive nutritional profile for such a mild vegetable.' },
+  { id:'onion', name:'Onion', img:'images/onion.jpg',
+    nutrition:{calories:'40 kcal',protein:'1.1g',fiber:'1.7g',vitC:'8mg',per:'100g'},
+    blurb:'Onions are rich in quercetin, a powerful antioxidant and anti-inflammatory compound. Regular consumption is linked to improved heart health, and their prebiotic fiber helps support a healthy gut microbiome.' },
+  { id:'hotpepper', name:'Hot Peppers', img:'images/hotpepper.jpg',
+    nutrition:{calories:'40 kcal',protein:'1.9g',fiber:'1.5g',vitC:'144mg',per:'100g'},
+    blurb:'Hot peppers are one of the richest plant sources of vitamin C — a single pepper can exceed your daily requirement. Capsaicin, the compound that creates heat, has well-documented anti-inflammatory and metabolism-boosting properties.' },
+  { id:'sweetpepper', name:'Sweet Peppers', img:'images/sweetpepper.jpg',
+    nutrition:{calories:'31 kcal',protein:'1g',fiber:'2.1g',vitC:'128mg',per:'100g'},
+    blurb:'Sweet bell peppers are exceptionally high in vitamin C — red peppers contain nearly three times more than oranges. They\'re also rich in vitamin B6 and folate, making them a nutrient-dense addition to any meal.' },
+  { id:'radish', name:'Radish', img:'images/radish.jpg',
+    nutrition:{calories:'16 kcal',protein:'0.7g',fiber:'1.6g',vitC:'15mg',per:'100g'},
+    blurb:'Radishes are low-calorie and packed with vitamin C, folate, and compounds called glucosinolates that support liver health. Their natural crunch and peppery flavor make them easy to eat raw for maximum nutritional benefit.' },
+  { id:'spinach', name:'Spinach', img:'images/spinach.jpg',
+    nutrition:{calories:'23 kcal',protein:'2.9g',fiber:'2.2g',vitC:'28mg',per:'100g'},
+    blurb:'Spinach is a nutritional powerhouse, delivering iron, calcium, and vitamins A, C, and K in every serving. Its high nitrate content has also been shown to improve blood pressure and cardiovascular health.' },
+  { id:'strawberry', name:'Strawberry', img:'images/strawberry.jpg',
+    nutrition:{calories:'32 kcal',protein:'0.7g',fiber:'2g',vitC:'59mg',per:'100g'},
+    blurb:'Strawberries are one of the most antioxidant-rich fruits you can grow, with particularly high levels of anthocyanins that support heart and brain health. They also deliver a full day\'s vitamin C in just one cup.' },
+  { id:'squash', name:'Summer Squash', img:'images/summersquash.jpg',
+    nutrition:{calories:'20 kcal',protein:'1.5g',fiber:'1.1g',vitC:'19mg',per:'100g'},
+    blurb:'Summer squash is very low in calories while providing meaningful amounts of vitamins C and B6, as well as manganese. Its mild flavor and tender texture make it one of the most versatile vegetables in the kitchen.' },
+  { id:'tomato', name:'Tomato', img:'images/tomato.jpg',
+    nutrition:{calories:'18 kcal',protein:'0.9g',fiber:'1.2g',vitC:'14mg',per:'100g'},
+    blurb:'Tomatoes are the leading dietary source of lycopene, an antioxidant strongly linked to reduced risk of heart disease and certain cancers. Cooking tomatoes actually increases lycopene availability, making sauces and soups especially beneficial.' },
+  { id:'turnip', name:'Turnip', img:'images/turnip.jpg',
+    nutrition:{calories:'28 kcal',protein:'0.9g',fiber:'1.8g',vitC:'21mg',per:'100g'},
+    blurb:'Turnips are a cruciferous vegetable rich in glucosinolates, compounds associated with cancer-protective properties. They\'re also a good source of vitamin C and fiber, and their greens are among the most nutritious leafy vegetables you can eat.' },
+  { id:'watermelon', name:'Watermelon', img:'images/watermelon.jpg',
+    nutrition:{calories:'30 kcal',protein:'0.6g',fiber:'0.4g',vitC:'8mg',per:'100g'},
+    blurb:'Watermelon is over 90% water, making it one of the best hydrating foods available. It\'s also a rich source of lycopene and citrulline, an amino acid that supports healthy blood flow and muscle recovery.' },
+  { id:'zucchini', name:'Zucchini', img:'images/zucchini.jpg',
+    nutrition:{calories:'17 kcal',protein:'1.2g',fiber:'1.1g',vitC:'18mg',per:'100g'},
+    blurb:'Zucchini is exceptionally low in calories and carbohydrates, making it popular as a pasta substitute. It provides a solid dose of vitamins C and B6, potassium, and antioxidants including lutein and zeaxanthin for eye health.' }
 ];
 
 const seedRecipes = [
@@ -254,11 +351,7 @@ function closeModals() {
 
 async function seedIfEmpty() {
   const snap = await getDocs(collection(db, 'recipes'));
-  if (snap.empty) {
-    for (const r of seedRecipes) {
-      await addDoc(collection(db, 'recipes'), {...r, createdAt: Date.now()});
-    }
-  }
+  if (snap.empty) for (const r of seedRecipes) await addDoc(collection(db, 'recipes'), {...r, createdAt: Date.now()});
 }
 
 async function loadRecipes() {
@@ -280,28 +373,20 @@ function renderGrid() {
     return `
       <div class="veggie-tile" data-id="${v.id}">
         <div class="veggie-photo-wrap">
-          <img class="veggie-photo" src="${v.img}" alt="${v.name}" loading="lazy"
-            onerror="this.style.display='none'"/>
+          <img class="veggie-photo" src="${v.img}" alt="${v.name}" loading="lazy" onerror="this.style.display='none'"/>
           ${count > 0 ? `<div class="veggie-badge">${count} recipe${count>1?'s':''}</div>` : ''}
         </div>
         <div class="veggie-info">
           <div class="veggie-name">${v.name}</div>
-          <div class="veggie-count">${count===0 ? 'No recipes yet' : count+' recipe'+(count>1?'s':'')}</div>
+          <div class="veggie-count">${count===0?'No recipes yet':count+' recipe'+(count>1?'s':'')}</div>
         </div>
-        <button class="nutrition-btn" data-nid="${v.id}">ⓘ</button>
-        <div class="nutrition-panel" id="nut-${v.id}">
-          <h4>Per ${v.nutrition.per}</h4>
-          <div class="nut-row"><span>Calories</span><span class="nut-val">${v.nutrition.calories}</span></div>
-          <div class="nut-row"><span>Protein</span><span class="nut-val">${v.nutrition.protein}</span></div>
-          <div class="nut-row"><span>Fiber</span><span class="nut-val">${v.nutrition.fiber}</span></div>
-          <div class="nut-row"><span>Vitamin C</span><span class="nut-val">${v.nutrition.vitC}</span></div>
-        </div>
+        <button class="nutrition-btn" data-nid="${v.id}" aria-label="Nutrition facts for ${v.name}">ⓘ</button>
       </div>`;
   }).join('');
 
   grid.querySelectorAll('.veggie-tile').forEach(tile => {
     tile.addEventListener('click', e => {
-      if (e.target.closest('.nutrition-btn') || e.target.closest('.nutrition-panel')) return;
+      if (e.target.closest('.nutrition-btn')) return;
       openDetail(tile.dataset.id);
     });
   });
@@ -309,18 +394,28 @@ function renderGrid() {
   grid.querySelectorAll('.nutrition-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      const panel = document.getElementById('nut-' + btn.dataset.nid);
-      const isOpen = panel.classList.contains('show');
-      document.querySelectorAll('.nutrition-panel').forEach(p => p.classList.remove('show'));
-      if (!isOpen) panel.classList.add('show');
+      openNutModal(btn.dataset.nid);
     });
   });
-
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.nutrition-btn') && !e.target.closest('.nutrition-panel'))
-      document.querySelectorAll('.nutrition-panel').forEach(p => p.classList.remove('show'));
-  });
 }
+
+function openNutModal(id) {
+  const v = veggieData.find(v => v.id === id);
+  document.getElementById('nutModalTitle').textContent = v.name + ' — Nutrition Facts';
+  document.getElementById('nutModalBlurb').textContent = v.blurb;
+  document.getElementById('nutModalGrid').innerHTML = `
+    <div class="nut-card"><div class="nut-card-val">${v.nutrition.calories.split(' ')[0]}</div><div class="nut-card-label">Calories</div></div>
+    <div class="nut-card"><div class="nut-card-val">${v.nutrition.protein}</div><div class="nut-card-label">Protein</div></div>
+    <div class="nut-card"><div class="nut-card-val">${v.nutrition.fiber}</div><div class="nut-card-label">Fiber</div></div>
+    <div class="nut-card"><div class="nut-card-val">${v.nutrition.vitC}</div><div class="nut-card-label">Vitamin C</div></div>`;
+  document.getElementById('nutModalPer').textContent = `Per ${v.nutrition.per}`;
+  document.getElementById('nutModal').classList.add('show');
+}
+
+document.getElementById('nutCloseBtn').onclick = () => document.getElementById('nutModal').classList.remove('show');
+document.getElementById('nutModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('nutModal')) document.getElementById('nutModal').classList.remove('show');
+});
 
 function openDetail(id) {
   activeVeggieId = id;
@@ -341,11 +436,15 @@ function openDetail(id) {
 
   document.getElementById('detailBody').innerHTML = `
     ${isAdmin ? `<div class="admin-panel" id="adminPanel"><h4>🌾 Admin — Pending Approvals</h4><div id="pendingList"><p style="font-size:13px;color:#7a9a5a;">Loading...</p></div></div>` : ''}
-    <div class="nutrition-strip">
-      <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.calories.split(' ')[0]}</div><div class="nut-stat-label">Calories</div></div>
-      <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.protein}</div><div class="nut-stat-label">Protein</div></div>
-      <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.fiber}</div><div class="nut-stat-label">Fiber</div></div>
-      <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.vitC}</div><div class="nut-stat-label">Vit C</div></div>
+    <div class="nutrition-strip-wrap">
+      <div class="nutrition-strip-title">Nutrition Facts</div>
+      <div class="nutrition-strip" style="margin-top:10px;">
+        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.calories.split(' ')[0]}</div><div class="nut-stat-label">Calories</div></div>
+        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.protein}</div><div class="nut-stat-label">Protein</div></div>
+        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.fiber}</div><div class="nut-stat-label">Fiber</div></div>
+        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.vitC}</div><div class="nut-stat-label">Vit C</div></div>
+      </div>
+      <div class="nutrition-blurb">${veggie.blurb}</div>
     </div>
     <div class="recipes-heading">Recipes</div>
     ${recipes.length===0
@@ -430,7 +529,7 @@ document.getElementById('loginSubmit').onclick = async () => {
 
   if (username.toLowerCase() === ADMIN_USER.toLowerCase()) {
     if (document.getElementById('passwordInput').value !== ADMIN_PASS) {
-      errEl.style.cssText = 'display:block;background:#fde8e8;color:#c05030;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px;';
+      errEl.style.cssText = 'display:block;background:#fde8e8;color:#c05030;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:12px;';
       errEl.textContent = 'Incorrect password.'; return;
     }
     currentUser = ADMIN_USER; isAdmin = true;
@@ -441,10 +540,9 @@ document.getElementById('loginSubmit').onclick = async () => {
 
   const userRef = doc(db, 'users', username.toLowerCase());
   const userSnap = await getDoc(userRef);
-
   if (!userSnap.exists()) {
     await setDoc(userRef, {username, status:'pending'});
-    errEl.style.cssText = 'display:block;background:#fff3cd;color:#856404;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px;';
+    errEl.style.cssText = 'display:block;background:#fff3cd;color:#856404;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:12px;line-height:1.5;';
     errEl.textContent = `Thanks ${username}! Your username is pending Denton's approval. Browse away in the meantime!`;
     currentUser = username; localStorage.setItem('nf_username', username);
     document.getElementById('loginBtn').textContent = '👤 ' + username + ' (pending)'; return;
@@ -452,7 +550,7 @@ document.getElementById('loginSubmit').onclick = async () => {
 
   const userData = userSnap.data();
   if (userData.status === 'pending') {
-    errEl.style.cssText = 'display:block;background:#fff3cd;color:#856404;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px;';
+    errEl.style.cssText = 'display:block;background:#fff3cd;color:#856404;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:12px;';
     errEl.textContent = 'Your username is still pending approval. Check back soon!';
     currentUser = username; localStorage.setItem('nf_username', username);
     document.getElementById('loginBtn').textContent = '👤 ' + username + ' (pending)'; return;
@@ -510,8 +608,7 @@ async function restoreSession() {
   if (savedAdmin) { isAdmin=true; document.getElementById('loginBtn').textContent='🌾 Denton'; return; }
   const userSnap = await getDoc(doc(db, 'users', savedUser.toLowerCase()));
   const status = userSnap.exists() ? userSnap.data().status : 'pending';
-  document.getElementById('loginBtn').textContent = status==='approved'
-    ? '👤 ' + savedUser : '👤 ' + savedUser + ' (pending)';
+  document.getElementById('loginBtn').textContent = status==='approved' ? '👤 '+savedUser : '👤 '+savedUser+' (pending)';
 }
 
 await seedIfEmpty();
