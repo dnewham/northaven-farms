@@ -11,7 +11,6 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: 'Lato', sans-serif; background: #f4f1e8; min-height: 100vh; color: #2d3a1e; -webkit-text-size-adjust: 100%; }
-
   .app-header { background: #2d4a1e; padding: 16px 20px; padding-top: max(16px, env(safe-area-inset-top)); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
   .app-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #e8f0d8; letter-spacing: 0.3px; }
   .app-title span { color: #9dc854; font-style: italic; }
@@ -21,11 +20,9 @@
   .btn-primary { background: #9dc854; border: none; color: #1a2e0a; padding: 9px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center; }
   .btn-primary:active { background: #b8d96f; }
 
-  /* GARDEN GRID */
   .garden-view { padding: 20px 16px; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
   .section-label { font-family: 'Playfair Display', serif; font-size: 14px; color: #5c7a3a; margin-bottom: 16px; letter-spacing: 0.3px; }
   .veggie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
-
   .veggie-tile { background: #ffffff; border-radius: 14px; overflow: hidden; cursor: pointer; border: 1.5px solid #d8e8c0; position: relative; transition: transform 0.15s, box-shadow 0.15s; }
   .veggie-tile:active { transform: scale(0.97); }
   @media (hover: hover) { .veggie-tile:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(45,74,30,0.18); border-color: #9dc854; } }
@@ -35,39 +32,32 @@
   .veggie-info { padding: 10px 12px 12px; }
   .veggie-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #2d3a1e; margin-bottom: 2px; }
   .veggie-count { font-size: 11px; color: #7a9a5a; }
-
-  /* NUTRITION BUTTON ON TILE */
-  .nutrition-btn {
-    position: absolute; bottom: 8px; right: 8px;
-    width: 32px; height: 32px;
-    background: #2d4a1e; color: #9dc854;
-    border-radius: 50%; font-size: 13px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; z-index: 5; border: none;
-    font-family: 'Lato', sans-serif;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .nutrition-btn { position: absolute; bottom: 8px; right: 8px; width: 32px; height: 32px; background: #2d4a1e; color: #9dc854; border-radius: 50%; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; border: none; font-family: 'Lato', sans-serif; }
   .nutrition-btn:active { background: #4a7a2a; }
 
-  /* NUTRITION MODAL (replaces popup for clarity) */
+  /* NUTRITION BOTTOM SHEET */
   .nut-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(20,35,10,0.55); z-index: 300; align-items: flex-end; justify-content: center; }
   .nut-modal-overlay.show { display: flex; }
-  .nut-modal {
-    background: #f4f1e8; border-radius: 20px 20px 0 0;
-    padding: 24px 24px max(24px, env(safe-area-inset-bottom));
-    width: 100%; max-width: 540px;
-    animation: slideUp 0.25s ease;
-  }
+  .nut-modal { background: #f4f1e8; border-radius: 20px 20px 0 0; padding: 24px 24px max(24px, env(safe-area-inset-bottom)); width: 100%; max-width: 540px; animation: slideUp 0.25s ease; }
   @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
   .nut-modal-handle { width: 40px; height: 4px; background: #c8d8a8; border-radius: 2px; margin: 0 auto 18px; }
-  .nut-modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #2d3a1e; margin-bottom: 6px; }
+  .nut-modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #2d3a1e; margin-bottom: 4px; }
+  .nut-serving { font-size: 12px; color: #9aaa8a; margin-bottom: 12px; }
   .nut-modal-blurb { font-size: 13px; color: #5c7a3a; line-height: 1.5; margin-bottom: 18px; }
-  .nut-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px; }
+
+  /* ROW 1 — always show: calories, protein, fiber */
+  .nut-row1 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  /* ROW 2 — notable nutrients, up to 4 */
+  .nut-row2 { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .nut-row2 .nut-card { flex: 1 1 calc(50% - 5px); }
+
   .nut-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 12px 14px; }
-  .nut-card-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: #3d6428; }
-  .nut-card-label { font-size: 11px; color: #7a9a5a; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-  .nut-per { font-size: 11px; color: #9aaa8a; text-align: right; margin-top: 4px; }
-  .nut-close-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 12px; padding: 14px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; }
+  .nut-card.highlight { border-color: #9dc854; background: #f4faec; }
+  .nut-card-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: #3d6428; }
+  .nut-card-label { font-size: 11px; color: #7a9a5a; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+  .nut-card.highlight .nut-card-label { color: #4a8a2a; }
+  .nut-section-label { font-size: 11px; font-weight: 700; color: #9aaa8a; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; margin-top: 4px; }
+  .nut-close-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 12px; padding: 14px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; min-height: 52px; }
 
   /* DETAIL VIEW */
   .detail-view { display: none; }
@@ -76,24 +66,25 @@
   .back-btn-big:active { background: #b8d96f; }
   .detail-hero { position: relative; height: 220px; overflow: hidden; background: #c8dca8; }
   .detail-hero-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .detail-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,40,10,0.88) 0%, rgba(20,40,10,0.15) 60%); display: flex; align-items: flex-end; padding: 20px 20px; }
+  .detail-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,40,10,0.88) 0%, rgba(20,40,10,0.15) 60%); display: flex; align-items: flex-end; padding: 20px; }
   .detail-hero-text h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: #e8f0d8; font-weight: 600; }
   .detail-hero-text p { font-size: 13px; color: #9dc854; margin-top: 4px; }
   .detail-body { padding: 20px 16px; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
 
-  /* NUTRITION STRIP ON DETAIL */
-  .nutrition-strip-wrap { margin-bottom: 20px; }
-  .nutrition-strip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .nutrition-strip-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: #2d3a1e; }
-  .nutrition-strip { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 14px 16px; display: flex; gap: 0; }
-  .nut-stat { flex: 1; text-align: center; padding: 0 6px; border-right: 1px solid #d8e8c0; }
-  .nut-stat:last-child { border-right: none; }
-  .nut-stat-val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #3d6428; }
-  .nut-stat-label { font-size: 9px; color: #7a9a5a; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.4px; }
-  .nutrition-blurb { font-size: 13px; color: #5c7a3a; line-height: 1.5; margin-top: 10px; background: #f0f4e8; border-radius: 10px; padding: 10px 14px; border: 1px solid #d8e8c0; }
+  .nutrition-detail-wrap { background: #fff; border-radius: 14px; border: 1.5px solid #d8e8c0; padding: 16px; margin-bottom: 20px; }
+  .nutrition-detail-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: #2d3a1e; margin-bottom: 2px; }
+  .nutrition-detail-serving { font-size: 11px; color: #9aaa8a; margin-bottom: 12px; }
+  .detail-nut-row1 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .detail-nut-row2 { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .detail-nut-row2 .detail-nut-card { flex: 1 1 calc(50% - 4px); }
+  .detail-nut-card { background: #f4f1e8; border-radius: 10px; padding: 10px 12px; }
+  .detail-nut-card.highlight { background: #f0f8e4; border: 1px solid #c8e090; }
+  .detail-nut-val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #3d6428; }
+  .detail-nut-label { font-size: 10px; color: #7a9a5a; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 1px; }
+  .nutrition-blurb { font-size: 13px; color: #5c7a3a; line-height: 1.5; border-top: 1px solid #e8f0d8; padding-top: 12px; margin-top: 4px; }
 
   .recipes-heading { font-family: 'Playfair Display', serif; font-size: 18px; color: #2d3a1e; margin-bottom: 14px; font-weight: 600; }
-  .recipe-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; min-height: 44px; }
+  .recipe-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; }
   .recipe-card:active { border-color: #9dc854; background: #f8fdf0; }
   @media (hover: hover) { .recipe-card:hover { border-color: #9dc854; transform: translateX(3px); } }
   .recipe-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
@@ -104,7 +95,6 @@
   .add-recipe-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 12px; padding: 16px 20px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; min-height: 52px; }
   .add-recipe-btn:active { background: #3d6428; }
 
-  /* MODALS */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(20,35,10,0.6); z-index: 200; align-items: flex-end; justify-content: center; }
   .modal-overlay.show { display: flex; }
   .modal { background: #f4f1e8; border-radius: 20px 20px 0 0; padding: 28px 24px max(28px, env(safe-area-inset-bottom)); width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; }
@@ -122,7 +112,6 @@
   .btn-submit { flex: 2; background: #2d4a1e; border: none; color: #9dc854; padding: 14px; border-radius: 12px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 52px; }
   .btn-submit:active { background: #3d6428; }
   .username-bar { background: #e8f2d4; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 14px; color: #3d6428; }
-
   .admin-panel { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px; margin-bottom: 20px; }
   .admin-panel h4 { font-family: 'Playfair Display', serif; font-size: 16px; color: #2d3a1e; margin-bottom: 12px; font-weight: 600; }
   .pending-user-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid #e8f0d8; gap: 10px; }
@@ -131,7 +120,6 @@
   .pending-actions { display: flex; gap: 8px; flex-shrink: 0; }
   .btn-approve { background: #2d4a1e; color: #9dc854; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; min-height: 44px; }
   .btn-deny { background: transparent; color: #c05030; border: 1.5px solid #c05030; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; min-height: 44px; }
-
   .toast { position: fixed; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: #2d4a1e; color: #9dc854; padding: 13px 24px; border-radius: 24px; font-size: 14px; font-weight: 700; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
 
@@ -170,14 +158,19 @@
   <div class="detail-body" id="detailBody"></div>
 </div>
 
-<!-- Nutrition Modal (bottom sheet) -->
+<!-- Nutrition Bottom Sheet -->
 <div class="nut-modal-overlay" id="nutModal">
-  <div class="nut-modal" id="nutModalContent">
+  <div class="nut-modal">
     <div class="nut-modal-handle"></div>
     <div class="nut-modal-title" id="nutModalTitle"></div>
+    <div class="nut-serving" id="nutModalServing"></div>
     <div class="nut-modal-blurb" id="nutModalBlurb"></div>
-    <div class="nut-modal-grid" id="nutModalGrid"></div>
-    <div class="nut-per" id="nutModalPer"></div>
+    <div class="nut-section-label">Macros</div>
+    <div class="nut-row1" id="nutRow1"></div>
+    <div id="nutRow2Wrap" style="display:none;">
+      <div class="nut-section-label">Notable Nutrients</div>
+      <div class="nut-row2" id="nutRow2"></div>
+    </div>
     <button class="nut-close-btn" id="nutCloseBtn">Done</button>
   </div>
 </div>
@@ -260,62 +253,118 @@ const ADMIN_PASS = 'admin';
 
 const veggieData = [
   { id:'beans', name:'Beans', img:'images/beans.jpg',
-    nutrition:{calories:'31 kcal',protein:'2g',fiber:'3.4g',vitC:'12mg',per:'100g'},
+    serving:'1 cup (100g)',
+    nutrition:{ calories:'31 kcal', protein:'2g', fiber:'3.4g' },
+    notable:[ {label:'Vitamin C', val:'12mg'}, {label:'Vitamin K', val:'43µg'}, {label:'Folate', val:'37µg'} ],
     blurb:'Green beans are a great source of vitamins C and K, and their high fiber content supports healthy digestion. They\'re low in calories while delivering meaningful amounts of folate and iron.' },
+
   { id:'cantaloupe', name:'Cantaloupe', img:'images/cantaloupe.jpg',
-    nutrition:{calories:'34 kcal',protein:'0.8g',fiber:'0.9g',vitC:'37mg',per:'100g'},
-    blurb:'Cantaloupe is loaded with vitamin C and beta-carotene, a powerful antioxidant the body converts to vitamin A. Its high water content also makes it excellent for hydration on hot days.' },
+    serving:'1 cup diced (160g)',
+    nutrition:{ calories:'54 kcal', protein:'1.3g', fiber:'1.4g' },
+    notable:[ {label:'Vitamin A', val:'270µg'}, {label:'Vitamin C', val:'59mg'}, {label:'Potassium', val:'427mg'} ],
+    blurb:'Cantaloupe is loaded with vitamin C and beta-carotene, which the body converts to vitamin A. Its high water content also makes it excellent for hydration on hot summer days.' },
+
   { id:'carrot', name:'Carrot', img:'images/carrot.jpg',
-    nutrition:{calories:'41 kcal',protein:'0.9g',fiber:'2.8g',vitC:'6mg',per:'100g'},
-    blurb:'Carrots are one of the richest sources of beta-carotene, which supports eye health and immune function. Their natural fiber also helps promote healthy blood sugar levels.' },
+    serving:'1 medium carrot (61g)',
+    nutrition:{ calories:'25 kcal', protein:'0.6g', fiber:'1.7g' },
+    notable:[ {label:'Vitamin A', val:'509µg'}, {label:'Vitamin K', val:'8µg'}, {label:'Potassium', val:'195mg'} ],
+    blurb:'Carrots are one of the richest sources of beta-carotene, which supports eye health and immune function. One medium carrot provides more than half your daily recommended vitamin A.' },
+
   { id:'corn', name:'Corn', img:'images/corn.jpg',
-    nutrition:{calories:'86 kcal',protein:'3.2g',fiber:'2.4g',vitC:'7mg',per:'100g'},
-    blurb:'Sweet corn provides a good balance of protein and fiber among vegetables, and contains lutein and zeaxanthin which support long-term eye health. It\'s also a natural source of B vitamins.' },
+    serving:'1 ear / 1 cup (154g)',
+    nutrition:{ calories:'132 kcal', protein:'4.9g', fiber:'3.6g' },
+    notable:[ {label:'Thiamin (B1)', val:'0.27mg'}, {label:'Folate', val:'76µg'}, {label:'Potassium', val:'325mg'} ],
+    blurb:'Sweet corn provides a solid balance of protein and fiber, and contains lutein and zeaxanthin which support long-term eye health. It\'s also a natural source of B vitamins and magnesium.' },
+
   { id:'cucumber', name:'Cucumber', img:'images/cucumber.jpg',
-    nutrition:{calories:'16 kcal',protein:'0.7g',fiber:'0.5g',vitC:'3mg',per:'100g'},
-    blurb:'Cucumbers are about 95% water, making them one of the most hydrating foods you can eat. They\'re also rich in antioxidants including flavonoids and tannins that help reduce inflammation.' },
+    serving:'½ cucumber (150g)',
+    nutrition:{ calories:'24 kcal', protein:'1g', fiber:'0.8g' },
+    notable:[ {label:'Vitamin K', val:'17µg'}, {label:'Potassium', val:'193mg'} ],
+    blurb:'Cucumbers are about 95% water, making them one of the most hydrating foods you can eat. They\'re also rich in vitamin K and antioxidants including flavonoids that help reduce inflammation.' },
+
   { id:'leeks', name:'Leeks', img:'images/leeks.jpg',
-    nutrition:{calories:'61 kcal',protein:'1.5g',fiber:'1.8g',vitC:'12mg',per:'100g'},
+    serving:'1 leek (89g)',
+    nutrition:{ calories:'54 kcal', protein:'1.3g', fiber:'1.6g' },
+    notable:[ {label:'Vitamin K', val:'42µg'}, {label:'Vitamin A', val:'100µg'}, {label:'Folate', val:'57µg'}, {label:'Manganese', val:'0.3mg'} ],
     blurb:'Leeks belong to the allium family and contain kaempferol, an antioxidant linked to heart health. They\'re also a good source of folate, vitamin K, and prebiotic fiber that feeds beneficial gut bacteria.' },
+
   { id:'lettuce', name:'Lettuce', img:'images/lettuce.jpg',
-    nutrition:{calories:'15 kcal',protein:'1.4g',fiber:'1.3g',vitC:'9mg',per:'100g'},
-    blurb:'Lettuce is exceptionally low in calories while providing vitamin K for bone health and folate for cell function. Darker varieties like arugula and romaine pack significantly more nutrients than iceberg.' },
+    serving:'2 cups shredded (94g)',
+    nutrition:{ calories:'14 kcal', protein:'1.3g', fiber:'1.2g' },
+    notable:[ {label:'Vitamin K', val:'102µg'}, {label:'Vitamin A', val:'145µg'}, {label:'Folate', val:'64µg'} ],
+    blurb:'Lettuce is exceptionally low in calories while providing vitamin K for bone health and folate for cell function. Darker varieties like romaine and arugula pack significantly more nutrients than iceberg.' },
+
   { id:'okra', name:'Okra', img:'images/okra.jpg',
-    nutrition:{calories:'33 kcal',protein:'1.9g',fiber:'3.2g',vitC:'23mg',per:'100g'},
-    blurb:'Okra is a standout for its soluble fiber content, which helps lower cholesterol and stabilize blood sugar. It\'s also rich in vitamin C, folate, and magnesium — an impressive nutritional profile for such a mild vegetable.' },
+    serving:'1 cup (100g)',
+    nutrition:{ calories:'33 kcal', protein:'1.9g', fiber:'3.2g' },
+    notable:[ {label:'Vitamin C', val:'23mg'}, {label:'Vitamin K', val:'53µg'}, {label:'Folate', val:'60µg'}, {label:'Magnesium', val:'57mg'} ],
+    blurb:'Okra is a standout for its soluble fiber, which helps lower cholesterol and stabilize blood sugar. It\'s also rich in vitamin K, folate, and magnesium — an impressive profile for such a mild vegetable.' },
+
   { id:'onion', name:'Onion', img:'images/onion.jpg',
-    nutrition:{calories:'40 kcal',protein:'1.1g',fiber:'1.7g',vitC:'8mg',per:'100g'},
-    blurb:'Onions are rich in quercetin, a powerful antioxidant and anti-inflammatory compound. Regular consumption is linked to improved heart health, and their prebiotic fiber helps support a healthy gut microbiome.' },
+    serving:'½ medium onion (55g)',
+    nutrition:{ calories:'22 kcal', protein:'0.6g', fiber:'0.9g' },
+    notable:[ {label:'Vitamin C', val:'4.4mg'}, {label:'Folate', val:'15µg'}, {label:'Quercetin', val:'★ High'} ],
+    blurb:'Onions are rich in quercetin, a powerful antioxidant and anti-inflammatory compound. Their prebiotic fiber also supports a healthy gut microbiome, and regular consumption is linked to improved heart health.' },
+
   { id:'hotpepper', name:'Hot Peppers', img:'images/hotpepper.jpg',
-    nutrition:{calories:'40 kcal',protein:'1.9g',fiber:'1.5g',vitC:'144mg',per:'100g'},
-    blurb:'Hot peppers are one of the richest plant sources of vitamin C — a single pepper can exceed your daily requirement. Capsaicin, the compound that creates heat, has well-documented anti-inflammatory and metabolism-boosting properties.' },
+    serving:'1 pepper (45g)',
+    nutrition:{ calories:'18 kcal', protein:'0.9g', fiber:'0.7g' },
+    notable:[ {label:'Vitamin C', val:'64mg'}, {label:'Vitamin A', val:'48µg'}, {label:'Capsaicin', val:'★ High'} ],
+    blurb:'Hot peppers are among the richest plant sources of vitamin C. Capsaicin, the compound that creates heat, has well-documented anti-inflammatory and metabolism-boosting properties.' },
+
   { id:'sweetpepper', name:'Sweet Peppers', img:'images/sweetpepper.jpg',
-    nutrition:{calories:'31 kcal',protein:'1g',fiber:'2.1g',vitC:'128mg',per:'100g'},
-    blurb:'Sweet bell peppers are exceptionally high in vitamin C — red peppers contain nearly three times more than oranges. They\'re also rich in vitamin B6 and folate, making them a nutrient-dense addition to any meal.' },
+    serving:'1 medium pepper (119g)',
+    nutrition:{ calories:'31 kcal', protein:'1g', fiber:'2.1g' },
+    notable:[ {label:'Vitamin C', val:'152mg'}, {label:'Vitamin A', val:'157µg'}, {label:'Vitamin B6', val:'0.3mg'}, {label:'Folate', val:'46µg'} ],
+    blurb:'Sweet bell peppers are exceptional for vitamin C — a single red pepper contains nearly three times more than an orange. They\'re also rich in vitamin A and B6, making them one of the most nutrient-dense vegetables you grow.' },
+
   { id:'radish', name:'Radish', img:'images/radish.jpg',
-    nutrition:{calories:'16 kcal',protein:'0.7g',fiber:'1.6g',vitC:'15mg',per:'100g'},
-    blurb:'Radishes are low-calorie and packed with vitamin C, folate, and compounds called glucosinolates that support liver health. Their natural crunch and peppery flavor make them easy to eat raw for maximum nutritional benefit.' },
+    serving:'½ cup sliced (58g)',
+    nutrition:{ calories:'9 kcal', protein:'0.4g', fiber:'0.9g' },
+    notable:[ {label:'Vitamin C', val:'8.6mg'}, {label:'Folate', val:'16µg'} ],
+    blurb:'Radishes are very low in calories and contain glucosinolates associated with liver health and cancer protection. Their peppery bite means they\'re most nutritious eaten raw, where vitamin C is fully intact.' },
+
   { id:'spinach', name:'Spinach', img:'images/spinach.jpg',
-    nutrition:{calories:'23 kcal',protein:'2.9g',fiber:'2.2g',vitC:'28mg',per:'100g'},
-    blurb:'Spinach is a nutritional powerhouse, delivering iron, calcium, and vitamins A, C, and K in every serving. Its high nitrate content has also been shown to improve blood pressure and cardiovascular health.' },
+    serving:'2 cups raw (60g)',
+    nutrition:{ calories:'14 kcal', protein:'1.7g', fiber:'1.3g' },
+    notable:[ {label:'Vitamin K', val:'290µg'}, {label:'Vitamin A', val:'281µg'}, {label:'Iron', val:'2mg'}, {label:'Folate', val:'116µg'} ],
+    blurb:'Spinach is a true nutritional powerhouse — delivering exceptional amounts of vitamin K, vitamin A, iron, and folate in every serving. Its high nitrate content also supports healthy blood pressure and cardiovascular function.' },
+
   { id:'strawberry', name:'Strawberry', img:'images/strawberry.jpg',
-    nutrition:{calories:'32 kcal',protein:'0.7g',fiber:'2g',vitC:'59mg',per:'100g'},
-    blurb:'Strawberries are one of the most antioxidant-rich fruits you can grow, with particularly high levels of anthocyanins that support heart and brain health. They also deliver a full day\'s vitamin C in just one cup.' },
+    serving:'1 cup (152g)',
+    nutrition:{ calories:'49 kcal', protein:'1g', fiber:'3g' },
+    notable:[ {label:'Vitamin C', val:'89mg'}, {label:'Manganese', val:'0.6mg'}, {label:'Folate', val:'36µg'} ],
+    blurb:'Strawberries are one of the most antioxidant-rich fruits you can grow, with high levels of anthocyanins that support heart and brain health. One cup delivers well over your full daily vitamin C requirement.' },
+
   { id:'squash', name:'Summer Squash', img:'images/summersquash.jpg',
-    nutrition:{calories:'20 kcal',protein:'1.5g',fiber:'1.1g',vitC:'19mg',per:'100g'},
-    blurb:'Summer squash is very low in calories while providing meaningful amounts of vitamins C and B6, as well as manganese. Its mild flavor and tender texture make it one of the most versatile vegetables in the kitchen.' },
+    serving:'1 cup sliced (113g)',
+    nutrition:{ calories:'18 kcal', protein:'1.4g', fiber:'1.2g' },
+    notable:[ {label:'Vitamin C', val:'19mg'}, {label:'Vitamin B6', val:'0.2mg'}, {label:'Manganese', val:'0.2mg'} ],
+    blurb:'Summer squash is very low in calories while providing vitamins C and B6, plus manganese for bone and metabolic health. Its mild flavor and tender texture make it one of the most versatile garden vegetables.' },
+
   { id:'tomato', name:'Tomato', img:'images/tomato.jpg',
-    nutrition:{calories:'18 kcal',protein:'0.9g',fiber:'1.2g',vitC:'14mg',per:'100g'},
-    blurb:'Tomatoes are the leading dietary source of lycopene, an antioxidant strongly linked to reduced risk of heart disease and certain cancers. Cooking tomatoes actually increases lycopene availability, making sauces and soups especially beneficial.' },
+    serving:'1 medium tomato (123g)',
+    nutrition:{ calories:'22 kcal', protein:'1.1g', fiber:'1.5g' },
+    notable:[ {label:'Vitamin C', val:'17mg'}, {label:'Vitamin A', val:'76µg'}, {label:'Potassium', val:'292mg'}, {label:'Lycopene', val:'★ High'} ],
+    blurb:'Tomatoes are the leading dietary source of lycopene, an antioxidant strongly linked to reduced risk of heart disease. Cooking tomatoes actually increases lycopene availability, making sauces and soups especially beneficial.' },
+
   { id:'turnip', name:'Turnip', img:'images/turnip.jpg',
-    nutrition:{calories:'28 kcal',protein:'0.9g',fiber:'1.8g',vitC:'21mg',per:'100g'},
-    blurb:'Turnips are a cruciferous vegetable rich in glucosinolates, compounds associated with cancer-protective properties. They\'re also a good source of vitamin C and fiber, and their greens are among the most nutritious leafy vegetables you can eat.' },
+    serving:'1 cup cubed (130g)',
+    nutrition:{ calories:'36 kcal', protein:'1.2g', fiber:'2.3g' },
+    notable:[ {label:'Vitamin C', val:'27mg'}, {label:'Potassium', val:'248mg'}, {label:'Glucosinolates', val:'★ High'} ],
+    blurb:'Turnips are a cruciferous vegetable rich in glucosinolates, compounds associated with cancer-protective properties. Don\'t overlook the greens — turnip tops are among the most nutritious leafy vegetables you can eat.' },
+
   { id:'watermelon', name:'Watermelon', img:'images/watermelon.jpg',
-    nutrition:{calories:'30 kcal',protein:'0.6g',fiber:'0.4g',vitC:'8mg',per:'100g'},
-    blurb:'Watermelon is over 90% water, making it one of the best hydrating foods available. It\'s also a rich source of lycopene and citrulline, an amino acid that supports healthy blood flow and muscle recovery.' },
+    serving:'2 cups diced (280g)',
+    nutrition:{ calories:'84 kcal', protein:'1.7g', fiber:'1.1g' },
+    notable:[ {label:'Vitamin C', val:'22mg'}, {label:'Vitamin A', val:'87µg'}, {label:'Lycopene', val:'★ High'}, {label:'Citrulline', val:'★ High'} ],
+    blurb:'Watermelon is over 90% water, making it one of the most hydrating foods available. It\'s also a rich source of lycopene and citrulline, an amino acid that supports healthy blood flow and muscle recovery.' },
+
   { id:'zucchini', name:'Zucchini', img:'images/zucchini.jpg',
-    nutrition:{calories:'17 kcal',protein:'1.2g',fiber:'1.1g',vitC:'18mg',per:'100g'},
-    blurb:'Zucchini is exceptionally low in calories and carbohydrates, making it popular as a pasta substitute. It provides a solid dose of vitamins C and B6, potassium, and antioxidants including lutein and zeaxanthin for eye health.' }
+    serving:'1 medium zucchini (196g)',
+    nutrition:{ calories:'33 kcal', protein:'2.4g', fiber:'2.2g' },
+    notable:[ {label:'Vitamin C', val:'35mg'}, {label:'Vitamin B6', val:'0.4mg'}, {label:'Potassium', val:'512mg'}, {label:'Manganese', val:'0.3mg'} ],
+    blurb:'Zucchini is exceptionally low in calories and carbohydrates while delivering solid potassium, vitamin C, and B6. Its antioxidants lutein and zeaxanthin also support long-term eye health.' }
 ];
 
 const seedRecipes = [
@@ -344,10 +393,7 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-
-function closeModals() {
-  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
-}
+function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show')); }
 
 async function seedIfEmpty() {
   const snap = await getDocs(collection(db, 'recipes'));
@@ -390,25 +436,38 @@ function renderGrid() {
       openDetail(tile.dataset.id);
     });
   });
-
   grid.querySelectorAll('.nutrition-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      openNutModal(btn.dataset.nid);
-    });
+    btn.addEventListener('click', e => { e.stopPropagation(); openNutModal(btn.dataset.nid); });
   });
+}
+
+function buildNutRow1(v, cardClass) {
+  return `
+    <div class="${cardClass}"><div class="${cardClass}-val">${v.nutrition.calories.split(' ')[0]}</div><div class="${cardClass}-label">Calories</div></div>
+    <div class="${cardClass}"><div class="${cardClass}-val">${v.nutrition.protein}</div><div class="${cardClass}-label">Protein</div></div>
+    <div class="${cardClass}"><div class="${cardClass}-val">${v.nutrition.fiber}</div><div class="${cardClass}-label">Fiber</div></div>`;
+}
+
+function buildNutRow2(v, cardClass) {
+  if (!v.notable || v.notable.length === 0) return '';
+  return v.notable.map(n => `
+    <div class="${cardClass} highlight"><div class="${cardClass}-val">${n.val}</div><div class="${cardClass}-label">${n.label}</div></div>`).join('');
 }
 
 function openNutModal(id) {
   const v = veggieData.find(v => v.id === id);
-  document.getElementById('nutModalTitle').textContent = v.name + ' — Nutrition Facts';
+  document.getElementById('nutModalTitle').textContent = v.name;
+  document.getElementById('nutModalServing').textContent = 'Per serving: ' + v.serving;
   document.getElementById('nutModalBlurb').textContent = v.blurb;
-  document.getElementById('nutModalGrid').innerHTML = `
-    <div class="nut-card"><div class="nut-card-val">${v.nutrition.calories.split(' ')[0]}</div><div class="nut-card-label">Calories</div></div>
-    <div class="nut-card"><div class="nut-card-val">${v.nutrition.protein}</div><div class="nut-card-label">Protein</div></div>
-    <div class="nut-card"><div class="nut-card-val">${v.nutrition.fiber}</div><div class="nut-card-label">Fiber</div></div>
-    <div class="nut-card"><div class="nut-card-val">${v.nutrition.vitC}</div><div class="nut-card-label">Vitamin C</div></div>`;
-  document.getElementById('nutModalPer').textContent = `Per ${v.nutrition.per}`;
+  document.getElementById('nutRow1').innerHTML = buildNutRow1(v, 'nut-card');
+  const row2 = buildNutRow2(v, 'nut-card');
+  const row2Wrap = document.getElementById('nutRow2Wrap');
+  if (row2) {
+    document.getElementById('nutRow2').innerHTML = row2;
+    row2Wrap.style.display = 'block';
+  } else {
+    row2Wrap.style.display = 'none';
+  }
   document.getElementById('nutModal').classList.add('show');
 }
 
@@ -419,36 +478,35 @@ document.getElementById('nutModal').addEventListener('click', e => {
 
 function openDetail(id) {
   activeVeggieId = id;
-  const veggie = veggieData.find(v => v.id === id);
+  const v = veggieData.find(veg => veg.id === id);
   const recipes = allRecipes[id] || [];
   document.getElementById('gardenView').style.display = 'none';
   document.getElementById('detailView').style.display = 'block';
   window.scrollTo(0, 0);
 
   document.getElementById('detailHero').innerHTML = `
-    <img class="detail-hero-photo" src="${veggie.img}" alt="${veggie.name}"/>
+    <img class="detail-hero-photo" src="${v.img}" alt="${v.name}"/>
     <div class="detail-hero-overlay">
       <div class="detail-hero-text">
-        <h2>${veggie.name}</h2>
+        <h2>${v.name}</h2>
         <p>${recipes.length} shared recipe${recipes.length!==1?'s':''}</p>
       </div>
     </div>`;
 
+  const row2html = buildNutRow2(v, 'detail-nut-card');
+
   document.getElementById('detailBody').innerHTML = `
     ${isAdmin ? `<div class="admin-panel" id="adminPanel"><h4>🌾 Admin — Pending Approvals</h4><div id="pendingList"><p style="font-size:13px;color:#7a9a5a;">Loading...</p></div></div>` : ''}
-    <div class="nutrition-strip-wrap">
-      <div class="nutrition-strip-title">Nutrition Facts</div>
-      <div class="nutrition-strip" style="margin-top:10px;">
-        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.calories.split(' ')[0]}</div><div class="nut-stat-label">Calories</div></div>
-        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.protein}</div><div class="nut-stat-label">Protein</div></div>
-        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.fiber}</div><div class="nut-stat-label">Fiber</div></div>
-        <div class="nut-stat"><div class="nut-stat-val">${veggie.nutrition.vitC}</div><div class="nut-stat-label">Vit C</div></div>
-      </div>
-      <div class="nutrition-blurb">${veggie.blurb}</div>
+    <div class="nutrition-detail-wrap">
+      <div class="nutrition-detail-title">Nutrition Facts</div>
+      <div class="nutrition-detail-serving">Per serving: ${v.serving}</div>
+      <div class="detail-nut-row1">${buildNutRow1(v, 'detail-nut-card')}</div>
+      ${row2html ? `<div class="nut-section-label" style="margin-top:10px;">Notable Nutrients</div><div class="detail-nut-row2">${row2html}</div>` : ''}
+      <div class="nutrition-blurb">${v.blurb}</div>
     </div>
     <div class="recipes-heading">Recipes</div>
     ${recipes.length===0
-      ? `<div class="no-recipes">🌱 No recipes yet for ${veggie.name} — be the first to add one!</div>`
+      ? `<div class="no-recipes">🌱 No recipes yet for ${v.name} — be the first to add one!</div>`
       : recipes.map(r=>`
           <div class="recipe-card" onclick="${r.url?`window.open('${r.url}','_blank')`:''}">
             <div class="recipe-card-top">
@@ -458,7 +516,7 @@ function openDetail(id) {
             <div class="recipe-shared-by">Shared by ${r.by}</div>
           </div>`).join('')
     }
-    <button class="add-recipe-btn" id="detailAddBtn">+ Add a Recipe for ${veggie.name}</button>`;
+    <button class="add-recipe-btn" id="detailAddBtn">+ Add a Recipe for ${v.name}</button>`;
 
   document.getElementById('detailAddBtn').onclick = () => openAddModal(id);
   if (isAdmin) bindAdminButtons();
