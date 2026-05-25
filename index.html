@@ -22,7 +22,7 @@
   .veggie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
   .veggie-tile { background: #ffffff; border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; border: 1.5px solid #d8e8c0; position: relative; }
   .veggie-tile:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(45,74,30,0.18); border-color: #9dc854; }
-  .veggie-photo-wrap { position: relative; overflow: hidden; height: 120px; background: #e8f0d8; }
+  .veggie-photo-wrap { position: relative; overflow: hidden; height: 120px; background: #c8dca8; }
   .veggie-photo { width: 100%; height: 120px; object-fit: cover; display: block; transition: transform 0.3s; }
   .veggie-tile:hover .veggie-photo { transform: scale(1.05); }
   .veggie-badge { position: absolute; top: 8px; right: 8px; background: #2d4a1e; color: #9dc854; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; z-index: 2; }
@@ -41,7 +41,7 @@
   .back-bar { background: #2d4a1e; padding: 12px 20px; position: sticky; top: 62px; z-index: 90; }
   .back-btn-big { background: #9dc854; color: #1a2e0a; border: none; border-radius: 20px; padding: 9px 20px; font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
   .back-btn-big:hover { background: #b8d96f; }
-  .detail-hero { position: relative; height: 220px; overflow: hidden; }
+  .detail-hero { position: relative; height: 220px; overflow: hidden; background: #c8dca8; }
   .detail-hero-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
   .detail-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,40,10,0.88) 0%, rgba(20,40,10,0.15) 60%); display: flex; align-items: flex-end; padding: 20px 28px; }
   .detail-hero-text h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: #e8f0d8; font-weight: 600; }
@@ -200,82 +200,44 @@ const ADMIN_USER = 'Denton';
 const ADMIN_PASS = 'admin';
 
 const veggieData = [
-  { id:'beans', name:'Beans',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Phaseolus_vulgaris_3.jpg/640px-Phaseolus_vulgaris_3.jpg',
-    nutrition:{calories:'31 kcal',protein:'2g',fiber:'3.4g',vitC:'12mg',per:'100g'} },
-  { id:'cantaloupe', name:'Cantaloupe',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Cantaloup_melon.jpg/640px-Cantaloup_melon.jpg',
-    nutrition:{calories:'34 kcal',protein:'0.8g',fiber:'0.9g',vitC:'37mg',per:'100g'} },
-  { id:'carrot', name:'Carrot',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Vegetable-Carrot-Bundle-wStalks.jpg/640px-Vegetable-Carrot-Bundle-wStalks.jpg',
-    nutrition:{calories:'41 kcal',protein:'0.9g',fiber:'2.8g',vitC:'6mg',per:'100g'} },
-  { id:'corn', name:'Corn',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Zea_mays_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-283.jpg/480px-Zea_mays_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-283.jpg',
-    nutrition:{calories:'86 kcal',protein:'3.2g',fiber:'2.4g',vitC:'7mg',per:'100g'} },
-  { id:'cucumber', name:'Cucumber',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/640px-A_small_cup_of_coffee.JPG',
-    nutrition:{calories:'16 kcal',protein:'0.7g',fiber:'0.5g',vitC:'3mg',per:'100g'} },
-  { id:'leeks', name:'Leeks',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Leek_on_white.jpg/480px-Leek_on_white.jpg',
-    nutrition:{calories:'61 kcal',protein:'1.5g',fiber:'1.8g',vitC:'12mg',per:'100g'} },
-  { id:'lettuce', name:'Lettuce',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Lettuce_Dream_5.jpg/640px-Lettuce_Dream_5.jpg',
-    nutrition:{calories:'15 kcal',protein:'1.4g',fiber:'1.3g',vitC:'9mg',per:'100g'} },
-  { id:'okra', name:'Okra',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Okra_-_Abelmoschus_esculentus.jpg/640px-Okra_-_Abelmoschus_esculentus.jpg',
-    nutrition:{calories:'33 kcal',protein:'1.9g',fiber:'3.2g',vitC:'23mg',per:'100g'} },
-  { id:'onion', name:'Onion',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Onion_on_a_white_background.jpg/640px-Onion_on_a_white_background.jpg',
-    nutrition:{calories:'40 kcal',protein:'1.1g',fiber:'1.7g',vitC:'8mg',per:'100g'} },
-  { id:'hotpepper', name:'Hot Peppers',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hot_peppers.jpg/640px-Hot_peppers.jpg',
-    nutrition:{calories:'40 kcal',protein:'1.9g',fiber:'1.5g',vitC:'144mg',per:'100g'} },
-  { id:'sweetpepper', name:'Sweet Peppers',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Capsicum_annuum_var_annuum_sweet_peppers.jpg/640px-Capsicum_annuum_var_annuum_sweet_peppers.jpg',
-    nutrition:{calories:'31 kcal',protein:'1g',fiber:'2.1g',vitC:'128mg',per:'100g'} },
-  { id:'radish', name:'Radish',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Radish_LE.jpg/640px-Radish_LE.jpg',
-    nutrition:{calories:'16 kcal',protein:'0.7g',fiber:'1.6g',vitC:'15mg',per:'100g'} },
-  { id:'spinach', name:'Spinach',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Spinazie_bloemen.jpg/640px-Spinazie_bloemen.jpg',
-    nutrition:{calories:'23 kcal',protein:'2.9g',fiber:'2.2g',vitC:'28mg',per:'100g'} },
-  { id:'strawberry', name:'Strawberry',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/PerfectStrawberry.jpg/640px-PerfectStrawberry.jpg',
-    nutrition:{calories:'32 kcal',protein:'0.7g',fiber:'2g',vitC:'59mg',per:'100g'} },
-  { id:'squash', name:'Summer Squash',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Yellow_summer_squash.jpg/640px-Yellow_summer_squash.jpg',
-    nutrition:{calories:'20 kcal',protein:'1.5g',fiber:'1.1g',vitC:'19mg',per:'100g'} },
-  { id:'tomato', name:'Tomato',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tomato_je.jpg/640px-Tomato_je.jpg',
-    nutrition:{calories:'18 kcal',protein:'0.9g',fiber:'1.2g',vitC:'14mg',per:'100g'} },
-  { id:'turnip', name:'Turnip',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Turnip_2622027.jpg/640px-Turnip_2622027.jpg',
-    nutrition:{calories:'28 kcal',protein:'0.9g',fiber:'1.8g',vitC:'21mg',per:'100g'} },
-  { id:'watermelon', name:'Watermelon',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Watermelon_seedless.jpg/640px-Watermelon_seedless.jpg',
-    nutrition:{calories:'30 kcal',protein:'0.6g',fiber:'0.4g',vitC:'8mg',per:'100g'} },
-  { id:'zucchini', name:'Zucchini',
-    photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Courgettes_on_display.jpg/640px-Courgettes_on_display.jpg',
-    nutrition:{calories:'17 kcal',protein:'1.2g',fiber:'1.1g',vitC:'18mg',per:'100g'} }
+  { id:'beans',       name:'Beans',         img:'images/beans.jpg',        nutrition:{calories:'31 kcal', protein:'2g',   fiber:'3.4g', vitC:'12mg',  per:'100g'} },
+  { id:'cantaloupe',  name:'Cantaloupe',    img:'images/cantaloupe.jpg',   nutrition:{calories:'34 kcal', protein:'0.8g', fiber:'0.9g', vitC:'37mg',  per:'100g'} },
+  { id:'carrot',      name:'Carrot',        img:'images/carrot.jpg',       nutrition:{calories:'41 kcal', protein:'0.9g', fiber:'2.8g', vitC:'6mg',   per:'100g'} },
+  { id:'corn',        name:'Corn',          img:'images/corn.jpg',         nutrition:{calories:'86 kcal', protein:'3.2g', fiber:'2.4g', vitC:'7mg',   per:'100g'} },
+  { id:'cucumber',    name:'Cucumber',      img:'images/cucumber.jpg',     nutrition:{calories:'16 kcal', protein:'0.7g', fiber:'0.5g', vitC:'3mg',   per:'100g'} },
+  { id:'leeks',       name:'Leeks',         img:'images/leeks.jpg',        nutrition:{calories:'61 kcal', protein:'1.5g', fiber:'1.8g', vitC:'12mg',  per:'100g'} },
+  { id:'lettuce',     name:'Lettuce',       img:'images/lettuce.jpg',      nutrition:{calories:'15 kcal', protein:'1.4g', fiber:'1.3g', vitC:'9mg',   per:'100g'} },
+  { id:'okra',        name:'Okra',          img:'images/okra.jpg',         nutrition:{calories:'33 kcal', protein:'1.9g', fiber:'3.2g', vitC:'23mg',  per:'100g'} },
+  { id:'onion',       name:'Onion',         img:'images/onion.jpg',        nutrition:{calories:'40 kcal', protein:'1.1g', fiber:'1.7g', vitC:'8mg',   per:'100g'} },
+  { id:'hotpepper',   name:'Hot Peppers',   img:'images/hotpepper.jpg',    nutrition:{calories:'40 kcal', protein:'1.9g', fiber:'1.5g', vitC:'144mg', per:'100g'} },
+  { id:'sweetpepper', name:'Sweet Peppers', img:'images/sweetpepper.jpg',  nutrition:{calories:'31 kcal', protein:'1g',   fiber:'2.1g', vitC:'128mg', per:'100g'} },
+  { id:'radish',      name:'Radish',        img:'images/radish.jpg',       nutrition:{calories:'16 kcal', protein:'0.7g', fiber:'1.6g', vitC:'15mg',  per:'100g'} },
+  { id:'spinach',     name:'Spinach',       img:'images/spinach.jpg',      nutrition:{calories:'23 kcal', protein:'2.9g', fiber:'2.2g', vitC:'28mg',  per:'100g'} },
+  { id:'strawberry',  name:'Strawberry',    img:'images/strawberry.jpg',   nutrition:{calories:'32 kcal', protein:'0.7g', fiber:'2g',   vitC:'59mg',  per:'100g'} },
+  { id:'squash',      name:'Summer Squash', img:'images/summersquash.jpg', nutrition:{calories:'20 kcal', protein:'1.5g', fiber:'1.1g', vitC:'19mg',  per:'100g'} },
+  { id:'tomato',      name:'Tomato',        img:'images/tomato.jpg',       nutrition:{calories:'18 kcal', protein:'0.9g', fiber:'1.2g', vitC:'14mg',  per:'100g'} },
+  { id:'turnip',      name:'Turnip',        img:'images/turnip.jpg',       nutrition:{calories:'28 kcal', protein:'0.9g', fiber:'1.8g', vitC:'21mg',  per:'100g'} },
+  { id:'watermelon',  name:'Watermelon',    img:'images/watermelon.jpg',   nutrition:{calories:'30 kcal', protein:'0.6g', fiber:'0.4g', vitC:'8mg',   per:'100g'} },
+  { id:'zucchini',    name:'Zucchini',      img:'images/zucchini.jpg',     nutrition:{calories:'17 kcal', protein:'1.2g', fiber:'1.1g', vitC:'18mg',  per:'100g'} }
 ];
 
 const seedRecipes = [
-  {veggieId:'cucumber',name:'Tzatziki Sauce',by:'Carolyn',url:'https://www.themediterraneandish.com/tzatziki-sauce-recipe/#wprm-recipe-container-10608',text:''},
-  {veggieId:'cucumber',name:'Pickles',by:'Carolyn',url:'https://www.allrecipes.com/recipe/26857/microwave-bread-and-butter-pickles/',text:''},
-  {veggieId:'cucumber',name:'Cucumber, Tomato & Onion Asian Salad',by:'Denton',url:'https://www.allrecipes.com/recipe/237984/marinated-cucumber-onion-and-tomato-salad/',text:''},
-  {veggieId:'leeks',name:'Grilled Leeks',by:'Denton',url:'https://veggiedesserts.com/grilled-leeks/',text:''},
-  {veggieId:'leeks',name:'Leek Mashed Potatoes',by:'Carolyn',url:'https://www.lordbyronskitchen.com/leek-mashed-potatoes/',text:''},
-  {veggieId:'okra',name:'Roasted Okra',by:'Denton',url:'https://www.allrecipes.com/recipe/204478/roasted-okra/',text:''},
-  {veggieId:'okra',name:'Okra & Tomatoes',by:'Denton',url:'https://www.theseasonedmom.com/okra-and-tomatoes/#wprm-recipe-container-91880',text:''},
-  {veggieId:'onion',name:'French Onion Soup',by:'Denton',url:'https://www.simplyrecipes.com/recipes/french_onion_soup/',text:''},
-  {veggieId:'radish',name:'Garlic Roasted Radishes',by:'Denton',url:'https://therealfooddietitians.com/garlic-roasted-radishes/',text:''},
-  {veggieId:'squash',name:'Squash Casserole',by:'Jackie',url:'https://addapinch.com/squash-casserole-recipe/',text:''},
-  {veggieId:'squash',name:'Squash & Cornbread Casserole',by:'Carolyn',url:'https://www.lanascooking.com/squash-and-cornbread-casserole/#recipe',text:''},
-  {veggieId:'zucchini',name:'Zucchini Fritters (Food.com)',by:'Carolyn',url:'https://www.food.com/recipe/zucchini-fritters-7073',text:''},
-  {veggieId:'zucchini',name:'Zucchini Fritters (Damn Delicious)',by:'Carolyn',url:'https://damndelicious.net/2014/04/02/zucchini-fritters/',text:''},
-  {veggieId:'zucchini',name:'Zucchini Muffins',by:'Carolyn',url:'https://sallysbakingaddiction.com/zucchini-muffins/',text:''},
-  {veggieId:'zucchini',name:'Stuffed Zucchini',by:'Lauren',url:'https://www.wellplated.com/stuffed-zucchini/',text:''},
-  {veggieId:'zucchini',name:'Zucchini Bread',by:'Carolyn',url:'https://www.allrecipes.com/recipe/238441/moms-spiced-zucchini-bread/',text:''}
+  {veggieId:'cucumber',  name:'Tzatziki Sauce',                    by:'Carolyn', url:'https://www.themediterraneandish.com/tzatziki-sauce-recipe/#wprm-recipe-container-10608', text:''},
+  {veggieId:'cucumber',  name:'Pickles',                           by:'Carolyn', url:'https://www.allrecipes.com/recipe/26857/microwave-bread-and-butter-pickles/', text:''},
+  {veggieId:'cucumber',  name:'Cucumber, Tomato & Onion Asian Salad', by:'Denton', url:'https://www.allrecipes.com/recipe/237984/marinated-cucumber-onion-and-tomato-salad/', text:''},
+  {veggieId:'leeks',     name:'Grilled Leeks',                     by:'Denton',  url:'https://veggiedesserts.com/grilled-leeks/', text:''},
+  {veggieId:'leeks',     name:'Leek Mashed Potatoes',              by:'Carolyn', url:'https://www.lordbyronskitchen.com/leek-mashed-potatoes/', text:''},
+  {veggieId:'okra',      name:'Roasted Okra',                      by:'Denton',  url:'https://www.allrecipes.com/recipe/204478/roasted-okra/', text:''},
+  {veggieId:'okra',      name:'Okra & Tomatoes',                   by:'Denton',  url:'https://www.theseasonedmom.com/okra-and-tomatoes/#wprm-recipe-container-91880', text:''},
+  {veggieId:'onion',     name:'French Onion Soup',                 by:'Denton',  url:'https://www.simplyrecipes.com/recipes/french_onion_soup/', text:''},
+  {veggieId:'radish',    name:'Garlic Roasted Radishes',           by:'Denton',  url:'https://therealfooddietitians.com/garlic-roasted-radishes/', text:''},
+  {veggieId:'squash',    name:'Squash Casserole',                  by:'Jackie',  url:'https://addapinch.com/squash-casserole-recipe/', text:''},
+  {veggieId:'squash',    name:'Squash & Cornbread Casserole',      by:'Carolyn', url:'https://www.lanascooking.com/squash-and-cornbread-casserole/#recipe', text:''},
+  {veggieId:'zucchini',  name:'Zucchini Fritters (Food.com)',      by:'Carolyn', url:'https://www.food.com/recipe/zucchini-fritters-7073', text:''},
+  {veggieId:'zucchini',  name:'Zucchini Fritters (Damn Delicious)',by:'Carolyn', url:'https://damndelicious.net/2014/04/02/zucchini-fritters/', text:''},
+  {veggieId:'zucchini',  name:'Zucchini Muffins',                  by:'Carolyn', url:'https://sallysbakingaddiction.com/zucchini-muffins/', text:''},
+  {veggieId:'zucchini',  name:'Stuffed Zucchini',                  by:'Lauren',  url:'https://www.wellplated.com/stuffed-zucchini/', text:''},
+  {veggieId:'zucchini',  name:'Zucchini Bread',                    by:'Carolyn', url:'https://www.allrecipes.com/recipe/238441/moms-spiced-zucchini-bread/', text:''}
 ];
 
 let currentUser = null, isAdmin = false, activeVeggieId = null, allRecipes = {};
@@ -285,11 +247,18 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show')); }
+
+function closeModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+}
 
 async function seedIfEmpty() {
   const snap = await getDocs(collection(db, 'recipes'));
-  if (snap.empty) for (const r of seedRecipes) await addDoc(collection(db, 'recipes'), {...r, createdAt: Date.now()});
+  if (snap.empty) {
+    for (const r of seedRecipes) {
+      await addDoc(collection(db, 'recipes'), {...r, createdAt: Date.now()});
+    }
+  }
 }
 
 async function loadRecipes() {
@@ -311,13 +280,13 @@ function renderGrid() {
     return `
       <div class="veggie-tile" data-id="${v.id}">
         <div class="veggie-photo-wrap">
-          <img class="veggie-photo" src="${v.photo}" alt="${v.name}" loading="lazy"
-            onerror="this.parentElement.style.background='#c8e0a8';this.style.display='none'"/>
+          <img class="veggie-photo" src="${v.img}" alt="${v.name}" loading="lazy"
+            onerror="this.style.display='none'"/>
           ${count > 0 ? `<div class="veggie-badge">${count} recipe${count>1?'s':''}</div>` : ''}
         </div>
         <div class="veggie-info">
           <div class="veggie-name">${v.name}</div>
-          <div class="veggie-count">${count===0?'No recipes yet':count+' recipe'+(count>1?'s':'')}</div>
+          <div class="veggie-count">${count===0 ? 'No recipes yet' : count+' recipe'+(count>1?'s':'')}</div>
         </div>
         <button class="nutrition-btn" data-nid="${v.id}">ⓘ</button>
         <div class="nutrition-panel" id="nut-${v.id}">
@@ -362,7 +331,7 @@ function openDetail(id) {
   window.scrollTo(0, 0);
 
   document.getElementById('detailHero').innerHTML = `
-    <img class="detail-hero-photo" src="${veggie.photo}" alt="${veggie.name}"/>
+    <img class="detail-hero-photo" src="${veggie.img}" alt="${veggie.name}"/>
     <div class="detail-hero-overlay">
       <div class="detail-hero-text">
         <h2>${veggie.name}</h2>
@@ -382,13 +351,13 @@ function openDetail(id) {
     ${recipes.length===0
       ? `<div class="no-recipes">🌱 No recipes yet for ${veggie.name} — be the first to add one!</div>`
       : recipes.map(r=>`
-        <div class="recipe-card" onclick="${r.url?`window.open('${r.url}','_blank')`:''}">
-          <div class="recipe-card-top">
-            <div class="recipe-card-name">${r.name}</div>
-            ${r.url?'<span class="recipe-link-icon">↗</span>':''}
-          </div>
-          <div class="recipe-shared-by">Shared by ${r.by}</div>
-        </div>`).join('')
+          <div class="recipe-card" onclick="${r.url?`window.open('${r.url}','_blank')`:''}">
+            <div class="recipe-card-top">
+              <div class="recipe-card-name">${r.name}</div>
+              ${r.url?'<span class="recipe-link-icon">↗</span>':''}
+            </div>
+            <div class="recipe-shared-by">Shared by ${r.by}</div>
+          </div>`).join('')
     }
     <button class="add-recipe-btn" id="detailAddBtn">+ Add a Recipe for ${veggie.name}</button>`;
 
@@ -450,7 +419,7 @@ document.getElementById('addCancel').onclick = closeModals;
 
 document.getElementById('usernameInput').addEventListener('input', function() {
   document.getElementById('passwordGroup').style.display =
-    this.value.trim().toLowerCase()===ADMIN_USER.toLowerCase() ? 'block' : 'none';
+    this.value.trim().toLowerCase() === ADMIN_USER.toLowerCase() ? 'block' : 'none';
 });
 
 document.getElementById('loginSubmit').onclick = async () => {
@@ -459,45 +428,46 @@ document.getElementById('loginSubmit').onclick = async () => {
   const errEl = document.getElementById('loginError');
   errEl.style.display = 'none';
 
-  if (username.toLowerCase()===ADMIN_USER.toLowerCase()) {
-    if (document.getElementById('passwordInput').value!==ADMIN_PASS) {
+  if (username.toLowerCase() === ADMIN_USER.toLowerCase()) {
+    if (document.getElementById('passwordInput').value !== ADMIN_PASS) {
       errEl.style.cssText = 'display:block;background:#fde8e8;color:#c05030;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px;';
       errEl.textContent = 'Incorrect password.'; return;
     }
-    currentUser=ADMIN_USER; isAdmin=true;
-    localStorage.setItem('nf_username',ADMIN_USER); localStorage.setItem('nf_admin','1');
+    currentUser = ADMIN_USER; isAdmin = true;
+    localStorage.setItem('nf_username', ADMIN_USER); localStorage.setItem('nf_admin', '1');
     document.getElementById('loginBtn').textContent = '🌾 Denton';
     closeModals(); showToast('Welcome back, Denton!'); return;
   }
 
-  const userRef = doc(db,'users',username.toLowerCase());
+  const userRef = doc(db, 'users', username.toLowerCase());
   const userSnap = await getDoc(userRef);
+
   if (!userSnap.exists()) {
-    await setDoc(userRef,{username,status:'pending'});
+    await setDoc(userRef, {username, status:'pending'});
     errEl.style.cssText = 'display:block;background:#fff3cd;color:#856404;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px;';
     errEl.textContent = `Thanks ${username}! Your username is pending Denton's approval. Browse away in the meantime!`;
-    currentUser=username; localStorage.setItem('nf_username',username);
-    document.getElementById('loginBtn').textContent = '👤 '+username+' (pending)'; return;
+    currentUser = username; localStorage.setItem('nf_username', username);
+    document.getElementById('loginBtn').textContent = '👤 ' + username + ' (pending)'; return;
   }
 
   const userData = userSnap.data();
-  if (userData.status==='pending') {
+  if (userData.status === 'pending') {
     errEl.style.cssText = 'display:block;background:#fff3cd;color:#856404;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px;';
     errEl.textContent = 'Your username is still pending approval. Check back soon!';
-    currentUser=username; localStorage.setItem('nf_username',username);
-    document.getElementById('loginBtn').textContent = '👤 '+username+' (pending)'; return;
+    currentUser = username; localStorage.setItem('nf_username', username);
+    document.getElementById('loginBtn').textContent = '👤 ' + username + ' (pending)'; return;
   }
 
-  currentUser=username; isAdmin=false;
-  localStorage.setItem('nf_username',username); localStorage.removeItem('nf_admin');
-  document.getElementById('loginBtn').textContent = '👤 '+username;
+  currentUser = username; isAdmin = false;
+  localStorage.setItem('nf_username', username); localStorage.removeItem('nf_admin');
+  document.getElementById('loginBtn').textContent = '👤 ' + username;
   closeModals(); showToast(`Welcome back, ${username}!`);
 };
 
 document.querySelectorAll('input[name="shareType"]').forEach(r => {
   r.addEventListener('change', () => {
-    document.getElementById('linkGroup').style.display = r.value==='link'?'block':'none';
-    document.getElementById('textGroup').style.display = r.value==='text'?'block':'none';
+    document.getElementById('linkGroup').style.display = r.value==='link' ? 'block' : 'none';
+    document.getElementById('textGroup').style.display = r.value==='text' ? 'block' : 'none';
   });
 });
 
@@ -505,8 +475,8 @@ document.getElementById('addBtn').onclick = () => openAddModal(veggieData[0].id)
 
 document.getElementById('addSubmit').onclick = async () => {
   if (!currentUser) return;
-  const userSnap = await getDoc(doc(db,'users',currentUser.toLowerCase()));
-  if (!isAdmin && !(userSnap.exists()&&userSnap.data().status==='approved')) {
+  const userSnap = await getDoc(doc(db, 'users', currentUser.toLowerCase()));
+  if (!isAdmin && !(userSnap.exists() && userSnap.data().status==='approved')) {
     showToast('Your username is still pending approval.'); closeModals(); return;
   }
   const veggieId = document.getElementById('recipeVeggie').value;
@@ -515,21 +485,21 @@ document.getElementById('addSubmit').onclick = async () => {
   const url = document.getElementById('recipeUrl').value.trim();
   const text = document.getElementById('recipeText').value.trim();
   if (!name) return;
-  await addDoc(collection(db,'recipes'),{
-    veggieId, name, by:currentUser,
-    url: shareType==='link'?url:'',
-    text: shareType==='text'?text:'',
+  await addDoc(collection(db, 'recipes'), {
+    veggieId, name, by: currentUser,
+    url: shareType==='link' ? url : '',
+    text: shareType==='text' ? text : '',
     createdAt: Date.now()
   });
   closeModals(); showToast('Recipe added!');
-  document.getElementById('recipeName').value='';
-  document.getElementById('recipeUrl').value='';
-  document.getElementById('recipeText').value='';
+  document.getElementById('recipeName').value = '';
+  document.getElementById('recipeUrl').value = '';
+  document.getElementById('recipeText').value = '';
   await loadRecipes();
 };
 
 document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if(e.target===o) closeModals(); });
+  o.addEventListener('click', e => { if (e.target===o) closeModals(); });
 });
 
 async function restoreSession() {
@@ -538,9 +508,10 @@ async function restoreSession() {
   if (!savedUser) return;
   currentUser = savedUser;
   if (savedAdmin) { isAdmin=true; document.getElementById('loginBtn').textContent='🌾 Denton'; return; }
-  const userSnap = await getDoc(doc(db,'users',savedUser.toLowerCase()));
+  const userSnap = await getDoc(doc(db, 'users', savedUser.toLowerCase()));
   const status = userSnap.exists() ? userSnap.data().status : 'pending';
-  document.getElementById('loginBtn').textContent = status==='approved' ? '👤 '+savedUser : '👤 '+savedUser+' (pending)';
+  document.getElementById('loginBtn').textContent = status==='approved'
+    ? '👤 ' + savedUser : '👤 ' + savedUser + ' (pending)';
 }
 
 await seedIfEmpty();
