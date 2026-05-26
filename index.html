@@ -91,6 +91,7 @@
   .recipe-card-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #2d3a1e; }
   .recipe-link-icon { font-size: 16px; color: #9dc854; flex-shrink: 0; }
   .recipe-shared-by { font-size: 11px; color: #7a9a5a; margin-top: 4px; }
+  .recipe-notes { font-size: 12px; color: #5c7a3a; margin-top: 6px; line-height: 1.5; background: #f0f4e8; border-radius: 8px; padding: 7px 10px; border-left: 3px solid #9dc854; font-style: italic; }
   .recipe-new-ribbon { position: absolute; top: 10px; right: -22px; background: #9dc854; color: #1a2e0a; font-size: 9px; font-weight: 700; font-family: 'Lato', sans-serif; padding: 3px 28px; transform: rotate(35deg); letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 1px 4px rgba(0,0,0,0.15); pointer-events: none; }
   .no-recipes { background: #f0f4e8; border-radius: 12px; padding: 20px; text-align: center; color: #7a9a5a; font-size: 14px; border: 1.5px dashed #c0d890; }
   .add-recipe-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 12px; padding: 16px 20px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; min-height: 52px; }
@@ -221,6 +222,10 @@
     <div class="form-group" id="linkGroup">
       <label>Recipe URL</label>
       <input type="url" id="recipeUrl" placeholder="https://..." inputmode="url"/>
+    </div>
+    <div class="form-group" id="notesGroup">
+      <label>Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#9aaa8a;font-size:11px;">(optional — tweaks, tips, what you loved)</span></label>
+      <textarea id="recipeNotes" placeholder="e.g. We doubled the garlic and used Greek yogurt instead of sour cream — highly recommend!" style="height:80px;"></textarea>
     </div>
     <div class="form-group" id="textGroup" style="display:none;">
       <label>Recipe Text</label>
@@ -578,6 +583,7 @@ function openDetail(id) {
               ${r.url?'<span class="recipe-link-icon">↗</span>':''}
             </div>
             <div class="recipe-shared-by">Shared by ${r.by}</div>
+            ${r.notes ? `<div class="recipe-notes">💬 ${r.notes}</div>` : ''}
           </div>`).join('')
     }
     <button class="add-recipe-btn" id="detailAddBtn">+ Add a Recipe for ${v.name}</button>`;
@@ -631,6 +637,7 @@ function openAddModal(veggieId) {
   document.getElementById('toggleLink').classList.add('active');
   document.getElementById('toggleText').classList.remove('active');
   document.getElementById('linkGroup').style.display = 'block';
+  document.getElementById('notesGroup').style.display = 'block';
   document.getElementById('textGroup').style.display = 'none';
   document.getElementById('addModal').classList.add('show');
 }
@@ -696,6 +703,7 @@ document.getElementById('toggleLink').onclick = () => {
   document.getElementById('toggleLink').classList.add('active');
   document.getElementById('toggleText').classList.remove('active');
   document.getElementById('linkGroup').style.display = 'block';
+  document.getElementById('notesGroup').style.display = 'block';
   document.getElementById('textGroup').style.display = 'none';
 };
 document.getElementById('toggleText').onclick = () => {
@@ -703,6 +711,7 @@ document.getElementById('toggleText').onclick = () => {
   document.getElementById('toggleText').classList.add('active');
   document.getElementById('toggleLink').classList.remove('active');
   document.getElementById('linkGroup').style.display = 'none';
+  document.getElementById('notesGroup').style.display = 'none';
   document.getElementById('textGroup').style.display = 'block';
 };
 
@@ -719,17 +728,20 @@ document.getElementById('addSubmit').onclick = async () => {
 
   const url = document.getElementById('recipeUrl').value.trim();
   const text = document.getElementById('recipeText').value.trim();
+  const notes = document.getElementById('recipeNotes').value.trim();
   if (!name) return;
   await addDoc(collection(db, 'recipes'), {
     veggieId, name, by: currentUser,
     url: shareType==='link' ? url : '',
     text: shareType==='text' ? text : '',
+    notes: shareType==='link' ? notes : '',
     createdAt: Date.now()
   });
   closeModals(); showToast('Recipe added!');
   document.getElementById('recipeName').value = '';
   document.getElementById('recipeUrl').value = '';
   document.getElementById('recipeText').value = '';
+  document.getElementById('recipeNotes').value = '';
   await loadRecipes();
 };
 
