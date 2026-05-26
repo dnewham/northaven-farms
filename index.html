@@ -84,13 +84,14 @@
   .nutrition-blurb { font-size: 13px; color: #5c7a3a; line-height: 1.5; border-top: 1px solid #e8f0d8; padding-top: 12px; margin-top: 4px; }
 
   .recipes-heading { font-family: 'Playfair Display', serif; font-size: 18px; color: #2d3a1e; margin-bottom: 14px; font-weight: 600; }
-  .recipe-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; }
+  .recipe-card { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; position: relative; overflow: hidden; }
   .recipe-card:active { border-color: #9dc854; background: #f8fdf0; }
   @media (hover: hover) { .recipe-card:hover { border-color: #9dc854; transform: translateX(3px); } }
   .recipe-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
   .recipe-card-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: #2d3a1e; }
   .recipe-link-icon { font-size: 16px; color: #9dc854; flex-shrink: 0; }
   .recipe-shared-by { font-size: 11px; color: #7a9a5a; margin-top: 4px; }
+  .recipe-new-ribbon { position: absolute; top: 10px; right: -22px; background: #9dc854; color: #1a2e0a; font-size: 9px; font-weight: 700; font-family: 'Lato', sans-serif; padding: 3px 28px; transform: rotate(35deg); letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 1px 4px rgba(0,0,0,0.15); pointer-events: none; }
   .no-recipes { background: #f0f4e8; border-radius: 12px; padding: 20px; text-align: center; color: #7a9a5a; font-size: 14px; border: 1.5px dashed #c0d890; }
   .add-recipe-btn { background: #2d4a1e; color: #9dc854; border: none; border-radius: 12px; padding: 16px 20px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; min-height: 52px; }
   .add-recipe-btn:active { background: #3d6428; }
@@ -104,9 +105,10 @@
   .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 13px 14px; border-radius: 10px; border: 1.5px solid #c0d890; background: #fff; font-family: 'Lato', sans-serif; font-size: 16px; color: #2d3a1e; outline: none; -webkit-appearance: none; }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #9dc854; }
   .form-group textarea { height: 110px; resize: none; font-size: 15px; }
-  .radio-group { display: flex; gap: 12px; }
-  .radio-label { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #2d3a1e; cursor: pointer; padding: 10px 0; min-height: 44px; }
-  .radio-label input[type="radio"] { width: 20px; height: 20px; accent-color: #2d4a1e; }
+  .share-toggle { display: flex; gap: 10px; }
+  .share-toggle-btn { flex: 1; padding: 14px 10px; border-radius: 12px; border: 2px solid #c0d890; background: #fff; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; color: #5c7a3a; cursor: pointer; text-align: center; min-height: 52px; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .share-toggle-btn.active { background: #2d4a1e; color: #9dc854; border-color: #2d4a1e; }
+  .share-toggle-btn:active { opacity: 0.85; }
   .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
   .btn-cancel { flex: 1; background: transparent; border: 1.5px solid #c0d890; color: #5c7a3a; padding: 14px; border-radius: 12px; font-family: 'Lato', sans-serif; font-size: 15px; cursor: pointer; min-height: 52px; }
   .btn-submit { flex: 2; background: #2d4a1e; border: none; color: #9dc854; padding: 14px; border-radius: 12px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 52px; }
@@ -211,9 +213,9 @@
     </div>
     <div class="form-group">
       <label>How are you sharing?</label>
-      <div class="radio-group">
-        <label class="radio-label"><input type="radio" name="shareType" value="link" checked> Link to recipe</label>
-        <label class="radio-label"><input type="radio" name="shareType" value="text"> Type it out</label>
+      <div class="share-toggle">
+        <button type="button" class="share-toggle-btn active" id="toggleLink">🔗 Link to recipe</button>
+        <button type="button" class="share-toggle-btn" id="toggleText">✏️ Type it out</button>
       </div>
     </div>
     <div class="form-group" id="linkGroup">
@@ -368,22 +370,83 @@ const veggieData = [
 ];
 
 const seedRecipes = [
-  {veggieId:'cucumber',  name:'Tzatziki Sauce',                    by:'Carolyn', url:'https://www.themediterraneandish.com/tzatziki-sauce-recipe/#wprm-recipe-container-10608', text:''},
-  {veggieId:'cucumber',  name:'Pickles',                           by:'Carolyn', url:'https://www.allrecipes.com/recipe/26857/microwave-bread-and-butter-pickles/', text:''},
-  {veggieId:'cucumber',  name:'Cucumber, Tomato & Onion Asian Salad', by:'Denton', url:'https://www.allrecipes.com/recipe/237984/marinated-cucumber-onion-and-tomato-salad/', text:''},
-  {veggieId:'leeks',     name:'Grilled Leeks',                     by:'Denton',  url:'https://veggiedesserts.com/grilled-leeks/', text:''},
-  {veggieId:'leeks',     name:'Leek Mashed Potatoes',              by:'Carolyn', url:'https://www.lordbyronskitchen.com/leek-mashed-potatoes/', text:''},
-  {veggieId:'okra',      name:'Roasted Okra',                      by:'Denton',  url:'https://www.allrecipes.com/recipe/204478/roasted-okra/', text:''},
-  {veggieId:'okra',      name:'Okra & Tomatoes',                   by:'Denton',  url:'https://www.theseasonedmom.com/okra-and-tomatoes/#wprm-recipe-container-91880', text:''},
-  {veggieId:'onion',     name:'French Onion Soup',                 by:'Denton',  url:'https://www.simplyrecipes.com/recipes/french_onion_soup/', text:''},
-  {veggieId:'radish',    name:'Garlic Roasted Radishes',           by:'Denton',  url:'https://therealfooddietitians.com/garlic-roasted-radishes/', text:''},
-  {veggieId:'squash',    name:'Squash Casserole',                  by:'Jackie',  url:'https://addapinch.com/squash-casserole-recipe/', text:''},
-  {veggieId:'squash',    name:'Squash & Cornbread Casserole',      by:'Carolyn', url:'https://www.lanascooking.com/squash-and-cornbread-casserole/#recipe', text:''},
-  {veggieId:'zucchini',  name:'Zucchini Fritters (Food.com)',      by:'Carolyn', url:'https://www.food.com/recipe/zucchini-fritters-7073', text:''},
-  {veggieId:'zucchini',  name:'Zucchini Fritters (Damn Delicious)',by:'Carolyn', url:'https://damndelicious.net/2014/04/02/zucchini-fritters/', text:''},
-  {veggieId:'zucchini',  name:'Zucchini Muffins',                  by:'Carolyn', url:'https://sallysbakingaddiction.com/zucchini-muffins/', text:''},
-  {veggieId:'zucchini',  name:'Stuffed Zucchini',                  by:'Lauren',  url:'https://www.wellplated.com/stuffed-zucchini/', text:''},
-  {veggieId:'zucchini',  name:'Zucchini Bread',                    by:'Carolyn', url:'https://www.allrecipes.com/recipe/238441/moms-spiced-zucchini-bread/', text:''}
+  {veggieId:'cucumber',  name:'Tzatziki Sauce',                    by:'Carolyn', url:'https://www.themediterraneandish.com/tzatziki-sauce-recipe/#wprm-recipe-container-10608', text:'', seeded:true},
+  {veggieId:'cucumber',  name:'Pickles',                           by:'Carolyn', url:'https://www.allrecipes.com/recipe/26857/microwave-bread-and-butter-pickles/', text:'', seeded:true},
+  {veggieId:'cucumber',  name:'Cucumber, Tomato & Onion Asian Salad', by:'Denton', url:'https://www.allrecipes.com/recipe/237984/marinated-cucumber-onion-and-tomato-salad/', text:'', seeded:true},
+  {veggieId:'leeks',     name:'Grilled Leeks',                     by:'Denton',  url:'https://veggiedesserts.com/grilled-leeks/', text:'', seeded:true},
+  {veggieId:'leeks',     name:'Leek Mashed Potatoes',              by:'Carolyn', url:'https://www.lordbyronskitchen.com/leek-mashed-potatoes/', text:'', seeded:true},
+  {veggieId:'okra',      name:'Roasted Okra',                      by:'Denton',  url:'https://www.allrecipes.com/recipe/204478/roasted-okra/', text:'', seeded:true},
+  {veggieId:'okra',      name:'Okra & Tomatoes',                   by:'Denton',  url:'https://www.theseasonedmom.com/okra-and-tomatoes/#wprm-recipe-container-91880', text:'', seeded:true},
+  {veggieId:'onion',     name:'French Onion Soup',                 by:'Denton',  url:'https://www.simplyrecipes.com/recipes/french_onion_soup/', text:'', seeded:true},
+  {veggieId:'radish',    name:'Garlic Roasted Radishes',           by:'Denton',  url:'https://therealfooddietitians.com/garlic-roasted-radishes/', text:'', seeded:true},
+  {veggieId:'squash',    name:'Squash Casserole',                  by:'Jackie',  url:'https://addapinch.com/squash-casserole-recipe/', text:'', seeded:true},
+  {veggieId:'squash',    name:'Squash & Cornbread Casserole',      by:'Carolyn', url:'https://www.lanascooking.com/squash-and-cornbread-casserole/#recipe', text:'', seeded:true},
+  {veggieId:'zucchini',  name:'Zucchini Fritters (Food.com)',      by:'Carolyn', url:'https://www.food.com/recipe/zucchini-fritters-7073', text:'', seeded:true},
+  {veggieId:'zucchini',  name:'Zucchini Fritters (Damn Delicious)',by:'Carolyn', url:'https://damndelicious.net/2014/04/02/zucchini-fritters/', text:'', seeded:true},
+  {veggieId:'zucchini',  name:'Zucchini Muffins',                  by:'Carolyn', url:'https://sallysbakingaddiction.com/zucchini-muffins/', text:'', seeded:true},
+  {veggieId:'zucchini',  name:'Stuffed Zucchini',                  by:'Lauren',  url:'https://www.wellplated.com/stuffed-zucchini/', text:'', seeded:true},
+  {veggieId:'zucchini',  name:'Zucchini Bread',                    by:'Carolyn', url:'https://www.allrecipes.com/recipe/238441/moms-spiced-zucchini-bread/', text:'', seeded:true},
+
+  // BEANS
+  {veggieId:'beans',     name:'Green Beans Amandine',              by:'Denton & Claude',  url:'https://cookieandkate.com/best-green-beans-recipe/', text:'', seeded:true},
+
+  // CANTALOUPE
+  {veggieId:'cantaloupe', name:'Cantaloupe Salad with Feta & Pistachios', by:'Denton & Claude', url:'https://thehealthyepicurean.com/cantaloupe-salad-with-feta-and-crushed-pistachios/', text:'', seeded:true},
+  {veggieId:'cantaloupe', name:'Cantaloupe & Prosciutto',          by:'Denton & Claude',  url:'https://thishealthytable.com/blog/cantaloupe-recipe/', text:'', seeded:true},
+  {veggieId:'cantaloupe', name:'Grilled Cantaloupe',               by:'Denton & Claude',  url:'https://thishealthytable.com/blog/grilled-cantaloupe/', text:'', seeded:true},
+  {veggieId:'cantaloupe', name:'Cantaloupe Gazpacho',              by:'Denton & Claude',  url:'https://www.savorysimple.net/cantaloupe-gazpacho/', text:'', seeded:true},
+
+  // CARROT
+  {veggieId:'carrot',    name:'Perfect Roasted Carrots (Three Ways)', by:'Denton & Claude', url:'https://cookieandkate.com/perfect-roasted-carrots-recipe/', text:'', seeded:true},
+  {veggieId:'carrot',    name:'Creamy Roasted Carrot Soup',        by:'Denton & Claude',  url:'https://cookieandkate.com/roasted-carrot-soup-recipe/', text:'', seeded:true},
+  {veggieId:'carrot',    name:'Roasted & Raw Carrot Salad with Avocado', by:'Denton & Claude', url:'https://cookieandkate.com/roasted-raw-carrot-salad-recipe/', text:'', seeded:true},
+
+  // CORN
+  {veggieId:'corn',      name:'Oven Roasted Corn on the Cob',      by:'Denton & Claude',  url:'https://www.foodnetwork.com/recipes/tyler-florence/oven-roasted-corn-on-the-cob-recipe-2103298', text:'', seeded:true},
+  {veggieId:'corn',      name:'Fresh Corn Salad',                  by:'Denton & Claude',  url:'https://www.foodnetwork.com/recipes/ina-garten/fresh-corn-salad-recipe-1914351', text:'', seeded:true},
+  {veggieId:'corn',      name:'Elote — Mexican Street Corn',       by:'Denton & Claude',  url:'https://www.giangiskitchen.com/elote/', text:'', seeded:true},
+  {veggieId:'corn',      name:'Fresh Corn "Grits"',                by:'Denton & Claude',  url:'https://www.foodnetwork.com/recipes/tyler-florence/fresh-corn-grits-2741738', text:'', seeded:true},
+
+  // HOT PEPPERS
+  {veggieId:'hotpepper', name:'Blistered Shishito Peppers',        by:'Denton & Claude',  url:'https://www.loveandlemons.com/shishito-peppers-recipe/', text:'', seeded:true},
+  {veggieId:'hotpepper', name:'Stuffed Bell Peppers',              by:'Denton & Claude',  url:'https://downshiftology.com/recipes/stuffed-peppers/', text:'', seeded:true},
+  {veggieId:'hotpepper', name:'Fried Italian Sweet Peppers',       by:'Denton & Claude',  url:'https://mangiawithmichele.com/fried-italian-sweet-peppers/', text:'', seeded:true},
+
+  // LETTUCE
+  {veggieId:'lettuce',   name:'Caesar Salad',                      by:'Denton & Claude',  url:'https://brooklynsupper.com/classic-caesar-salad/', text:'', seeded:true},
+  {veggieId:'lettuce',   name:'Caesar Salad Dressing (Mayo-Based)', by:'Denton & Claude', url:'https://www.onceuponachef.com/recipes/caesar-salad-dressing.html#recipe', text:'', seeded:true},
+  {veggieId:'lettuce',   name:'The Little Green Salad',            by:'Denton & Claude',  url:'https://cookieandkate.com/the-little-green-salad/', text:'', seeded:true},
+  {veggieId:'lettuce',   name:'Simple Arugula Salad',              by:'Denton & Claude',  url:'https://cookieandkate.com/simple-arugula-salad-recipe/', text:'', seeded:true},
+
+  // ONION (additional)
+  {veggieId:'onion',     name:'Onion Pie',                         by:'Denton & Claude',  url:'https://www.tasteofhome.com/recipes/onion-pie/', text:'', seeded:true},
+  {veggieId:'onion',     name:'Caramelized Onions',                by:'Denton & Claude',  url:'https://www.onceuponachef.com/how-to/caramelized-onions.html', text:'', seeded:true},
+  {veggieId:'onion',     name:'French Onion Dip (from scratch)',   by:'Denton & Claude',  url:'https://www.onceuponachef.com/recipes/french-onion-dip.html', text:'', seeded:true},
+  {veggieId:'onion',     name:'Quick Pickled Red Onions',          by:'Denton & Claude',  url:'https://cookieandkate.com/quick-pickled-onions-recipe/', text:'', seeded:true},
+
+  // SPINACH
+  {veggieId:'spinach',   name:'Spinach Salad with Goat Cheese & Pecans', by:'Denton & Claude', url:'https://cookieandkate.com/spinach-salad-recipe/', text:'', seeded:true},
+  {veggieId:'spinach',   name:'Garlic Sautéed Spinach',            by:'Denton & Claude',  url:'https://www.foodnetwork.com/recipes/ina-garten/garlic-sauteed-spinach-recipe-1941277', text:'', seeded:true},
+  {veggieId:'spinach',   name:'Spinach Lasagna',                   by:'Denton & Claude',  url:'https://cookieandkate.com/spinach-lasagna/', text:'', seeded:true},
+
+  // STRAWBERRY
+  {veggieId:'strawberry', name:'Spinach Strawberry Salad with Poppy Seed Dressing', by:'Denton & Claude', url:'https://www.wellplated.com/spinach-strawberry-salad/', text:'', seeded:true},
+  {veggieId:'strawberry', name:'Healthier Strawberry Shortcake',  by:'Denton & Claude',  url:'https://cookieandkate.com/healthier-strawberry-shortcake-recipe/', text:'', seeded:true},
+
+  // TOMATO
+  {veggieId:'tomato',    name:'Caprese Salad with Balsamic Glaze', by:'Denton & Claude',  url:'https://www.onceuponachef.com/recipes/caprese-salad-balsamic-glaze.html', text:'', seeded:true},
+  {veggieId:'tomato',    name:'Tomato Basil Bruschetta',           by:'Denton & Claude',  url:'https://cookieandkate.com/tomato-basil-bruschetta-recipe/', text:'', seeded:true},
+  {veggieId:'tomato',    name:'Homemade Tomato Sauce',             by:'Denton & Claude',  url:'https://www.onceuponachef.com/recipes/tomato-sauce-basil.html', text:'', seeded:true},
+
+  // TURNIP
+  {veggieId:'turnip',    name:'Roasted Turnips',                   by:'Denton & Claude',  url:'https://www.foodnetwork.com/recipes/nancy-fuller/roasted-turnips-2775836', text:'', seeded:true},
+  {veggieId:'turnip',    name:'Mashed Turnips',                    by:'Denton & Claude',  url:'https://www.allrecipes.com/recipe/256545/mashed-turnips/', text:'', seeded:true},
+  {veggieId:'turnip',    name:'Southern Turnip Greens',            by:'Denton & Claude',  url:'https://www.africanbites.com/turnip-greens/', text:'', seeded:true},
+
+  // WATERMELON
+  {veggieId:'watermelon', name:'How to Cut a Watermelon',          by:'Denton & Claude',  url:'https://www.americastestkitchen.com/articles/6064-to-cut-a-watermelon-easily-use-a-serrated-knife', text:'', seeded:true},
+  {veggieId:'watermelon', name:'Watermelon Salad with Feta & Mint', by:'Denton & Claude', url:'https://cookieandkate.com/watermelon-salad-recipe/', text:'', seeded:true},
+  {veggieId:'watermelon', name:'Watermelon Feta Salad',            by:'Denton & Claude',  url:'https://www.onceuponachef.com/recipes/watermelon-feta-salad.html', text:'', seeded:true}
 ];
 
 let currentUser = null, isAdmin = false, activeVeggieId = null, allRecipes = {};
@@ -509,6 +572,7 @@ function openDetail(id) {
       ? `<div class="no-recipes">🌱 No recipes yet for ${v.name} — be the first to add one!</div>`
       : recipes.map(r=>`
           <div class="recipe-card" onclick="${r.url?`window.open('${r.url}','_blank')`:''}">
+            ${!r.seeded && r.createdAt && (Date.now() - r.createdAt) < 90*24*60*60*1000 ? '<div class="recipe-new-ribbon">New</div>' : ''}
             <div class="recipe-card-top">
               <div class="recipe-card-name">${r.name}</div>
               ${r.url?'<span class="recipe-link-icon">↗</span>':''}
@@ -562,6 +626,12 @@ function openAddModal(veggieId) {
   if (!currentUser) { showToast('Please sign in first.'); document.getElementById('loginModal').classList.add('show'); return; }
   document.getElementById('recipeVeggie').innerHTML = veggieData.map(v=>`<option value="${v.id}" ${v.id===veggieId?'selected':''}>${v.name}</option>`).join('');
   document.getElementById('addModalUserBar').innerHTML = `Sharing as <strong>${currentUser}</strong>`;
+  // Reset toggle to Link state
+  shareType = 'link';
+  document.getElementById('toggleLink').classList.add('active');
+  document.getElementById('toggleText').classList.remove('active');
+  document.getElementById('linkGroup').style.display = 'block';
+  document.getElementById('textGroup').style.display = 'none';
   document.getElementById('addModal').classList.add('show');
 }
 
@@ -620,12 +690,21 @@ document.getElementById('loginSubmit').onclick = async () => {
   closeModals(); showToast(`Welcome back, ${username}!`);
 };
 
-document.querySelectorAll('input[name="shareType"]').forEach(r => {
-  r.addEventListener('change', () => {
-    document.getElementById('linkGroup').style.display = r.value==='link' ? 'block' : 'none';
-    document.getElementById('textGroup').style.display = r.value==='text' ? 'block' : 'none';
-  });
-});
+let shareType = 'link';
+document.getElementById('toggleLink').onclick = () => {
+  shareType = 'link';
+  document.getElementById('toggleLink').classList.add('active');
+  document.getElementById('toggleText').classList.remove('active');
+  document.getElementById('linkGroup').style.display = 'block';
+  document.getElementById('textGroup').style.display = 'none';
+};
+document.getElementById('toggleText').onclick = () => {
+  shareType = 'text';
+  document.getElementById('toggleText').classList.add('active');
+  document.getElementById('toggleLink').classList.remove('active');
+  document.getElementById('linkGroup').style.display = 'none';
+  document.getElementById('textGroup').style.display = 'block';
+};
 
 document.getElementById('addBtn').onclick = () => openAddModal(veggieData[0].id);
 
@@ -637,7 +716,7 @@ document.getElementById('addSubmit').onclick = async () => {
   }
   const veggieId = document.getElementById('recipeVeggie').value;
   const name = document.getElementById('recipeName').value.trim();
-  const shareType = document.querySelector('input[name="shareType"]:checked').value;
+
   const url = document.getElementById('recipeUrl').value.trim();
   const text = document.getElementById('recipeText').value.trim();
   if (!name) return;
