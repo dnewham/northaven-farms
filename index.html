@@ -946,23 +946,13 @@ async function renderUsersTab() {
         <span class="user-status-badge ${u.status==='approved'?'badge-approved':'badge-pending'}">${u.status==='approved'?'✓ Approved':'⏳ Pending'}</span>
       </div>
       <div class="user-actions">
-        ${u.status==='pending' ? `<button class="btn-approve" data-uid="${u.id}" data-uname="${u.username}" onclick="approveUser(this)">Approve</button>` : ''}
-        <button class="btn-deny" data-uid="${u.id}" data-uname="${u.username}" onclick="removeUser(this)">${u.status==='pending'?'Deny':'Revoke'}</button>
+        ${u.status==='pending' ? `<button class="btn-approve" data-uid="${u.id}" data-uname="${u.username}" data-action="approve">Approve</button>` : ''}
+        <button class="btn-deny" data-uid="${u.id}" data-uname="${u.username}" data-action="remove">${u.status==='pending'?'Deny':'Revoke'}</button>
       </div>
     </div>`).join('');
 }
 
-window.approveUser = async (btn) => {
-  await setDoc(doc(db,'users',btn.dataset.uid),{username:btn.dataset.uname,status:'approved'});
-  showToast(`${btn.dataset.uname} approved!`);
-  renderUsersTab();
-};
-window.removeUser = async (btn) => {
-  if (!confirm(`Remove user "${btn.dataset.uname}"?`)) return;
-  await deleteDoc(doc(db,'users',btn.dataset.uid));
-  showToast('User removed.');
-  renderUsersTab();
-};
+
 
 // ── RECIPES TAB ────────────────────────────────────────────────────────────
 async function renderRecipesTab(filterVeggieId='') {
@@ -994,21 +984,15 @@ async function renderRecipesTab(filterVeggieId='') {
       <div class="dash-recipe-name">${r.name}</div>
       <div class="dash-recipe-meta">${veggieMap[r.veggieId]||r.veggieId} · ${r.by}${r.url ? ' · 🔗 Link' : ' · ✏️ Text'}</div>
       <div class="dash-recipe-actions">
-        <button class="btn-edit" onclick="openEditRecipe('${r.id}')">Edit</button>
-        <button class="btn-delete" onclick="deleteRecipe('${r.id}','${r.name.replace(/'/g,"\'")}')">Delete</button>
+        <button class="btn-edit" data-rid="${r.id}" data-raction="edit">Edit</button>
+        <button class="btn-delete" data-rid="${r.id}" data-rname="${r.name.replace(/"/g,'&quot;')}" data-raction="delete">Delete</button>
       </div>
     </div>`).join('');
 }
 
-window.deleteRecipe = async (id, name) => {
-  if (!confirm(`Delete "${name}"?`)) return;
-  await deleteDoc(doc(db,'recipes',id));
-  showToast('Recipe deleted.');
-  await loadRecipes();
-  renderRecipesTab(document.getElementById('dashVeggieFilter').value);
-};
 
-window.openEditRecipe = async (id) => {
+
+async function openEditRecipe(id) {
   const snap = await getDoc(doc(db,'recipes',id));
   if (!snap.exists()) return;
   const r = snap.data();
@@ -1022,7 +1006,7 @@ window.openEditRecipe = async (id) => {
   document.getElementById('editNotesGroup').style.display = isLink ? 'block' : 'none';
   document.getElementById('editTextGroup').style.display = isLink ? 'none' : 'block';
   document.getElementById('editModal').classList.add('show');
-};
+}
 
 document.getElementById('editCancel').onclick = () => closeModals();
 document.getElementById('editSave').onclick = async () => {
@@ -1053,13 +1037,48 @@ function renderGardenTab() {
     <div class="garden-avail-row">
       <span class="garden-avail-name">${v.name}</span>
       <div class="avail-toggle">
-        <button class="avail-btn ${!status?'active-none':''}" onclick="setAvailability('${v.id}','none')">None</button>
-        <button class="avail-btn ${status==='available'?'active-avail':''}" onclick="setAvailability('${v.id}','available')">Available</button>
-        <button class="avail-btn ${status==='soon'?'active-soon':''}" onclick="setAvailability('${v.id}','soon')">Coming Soon</button>
+        <button class="avail-btn ${!status?'active-none':''}" data-vid="${v.id}" data-status="none">None</button>
+        <button class="avail-btn ${status==='available'?'active-avail':''}" data-vid="${v.id}" data-status="available">Available</button>
+        <button class="avail-btn ${status==='soon'?'active-soon':''}" data-vid="${v.id}" data-status="soon">Coming Soon</button>
       </div>
     </div>`;
   }).join('');
 }
+
+// ── PERSISTENT DASHBOARD LISTENERS (attached once) ────────────────────────
+document.getElementById('userList').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  if (btn.dataset.action === 'approve') {
+    await setDoc(doc(db,'users',btn.dataset.uid),{username:btn.dataset.uname,status:'approved'});
+    showToast(btn.dataset.uname + ' approved!');
+    renderUsersTab();
+  } else if (btn.dataset.action === 'remove') {
+    if (!confirm('Remove user "' + btn.dataset.uname + '"?')) return;
+    await deleteDoc(doc(db,'users',btn.dataset.uid));
+    showToast('User removed.');
+    renderUsersTab();
+  }
+});
+
+document.getElementById('recipeList').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-raction]');
+  if (!btn) return;
+  if (btn.dataset.raction === 'edit') openEditRecipe(btn.dataset.rid);
+  else if (btn.dataset.raction === 'delete') {
+    if (!confirm('Delete "' + btn.dataset.rname + '"?')) return;
+    await deleteDoc(doc(db,'recipes',btn.dataset.rid));
+    showToast('Recipe deleted.');
+    await loadRecipes();
+    renderRecipesTab(document.getElementById('dashVeggieFilter').value);
+  }
+});
+
+document.getElementById('gardenAvailList').addEventListener('click', e => {
+  const btn = e.target.closest('.avail-btn');
+  if (!btn) return;
+  setAvailability(btn.dataset.vid, btn.dataset.status);
+});
 
 await seedIfEmpty();
 await loadAvailability();
