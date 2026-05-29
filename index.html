@@ -1045,39 +1045,41 @@ function renderGardenTab() {
   }).join('');
 }
 
-// ── PERSISTENT DASHBOARD LISTENERS (attached once) ────────────────────────
-document.getElementById('userList').addEventListener('click', async e => {
-  const btn = e.target.closest('[data-action]');
-  if (!btn) return;
-  if (btn.dataset.action === 'approve') {
-    await setDoc(doc(db,'users',btn.dataset.uid),{username:btn.dataset.uname,status:'approved'});
-    showToast(btn.dataset.uname + ' approved!');
-    renderUsersTab();
-  } else if (btn.dataset.action === 'remove') {
-    if (!confirm('Remove user "' + btn.dataset.uname + '"?')) return;
-    await deleteDoc(doc(db,'users',btn.dataset.uid));
-    showToast('User removed.');
-    renderUsersTab();
+// ── SINGLE DELEGATED LISTENER on dashView (always visible, never hidden) ──
+document.getElementById('dashView').addEventListener('click', async e => {
+  // Users tab — approve / remove
+  const userBtn = e.target.closest('[data-action]');
+  if (userBtn) {
+    if (userBtn.dataset.action === 'approve') {
+      await setDoc(doc(db,'users',userBtn.dataset.uid),{username:userBtn.dataset.uname,status:'approved'});
+      showToast(userBtn.dataset.uname + ' approved!');
+      renderUsersTab();
+    } else if (userBtn.dataset.action === 'remove') {
+      if (!confirm('Remove user "' + userBtn.dataset.uname + '"?')) return;
+      await deleteDoc(doc(db,'users',userBtn.dataset.uid));
+      showToast('User removed.');
+      renderUsersTab();
+    }
+    return;
   }
-});
-
-document.getElementById('recipeList').addEventListener('click', async e => {
-  const btn = e.target.closest('[data-raction]');
-  if (!btn) return;
-  if (btn.dataset.raction === 'edit') openEditRecipe(btn.dataset.rid);
-  else if (btn.dataset.raction === 'delete') {
-    if (!confirm('Delete "' + btn.dataset.rname + '"?')) return;
-    await deleteDoc(doc(db,'recipes',btn.dataset.rid));
-    showToast('Recipe deleted.');
-    await loadRecipes();
-    renderRecipesTab(document.getElementById('dashVeggieFilter').value);
+  // Recipes tab — edit / delete
+  const recipeBtn = e.target.closest('[data-raction]');
+  if (recipeBtn) {
+    if (recipeBtn.dataset.raction === 'edit') openEditRecipe(recipeBtn.dataset.rid);
+    else if (recipeBtn.dataset.raction === 'delete') {
+      if (!confirm('Delete "' + recipeBtn.dataset.rname + '"?')) return;
+      await deleteDoc(doc(db,'recipes',recipeBtn.dataset.rid));
+      showToast('Recipe deleted.');
+      await loadRecipes();
+      renderRecipesTab(document.getElementById('dashVeggieFilter').value);
+    }
+    return;
   }
-});
-
-document.getElementById('gardenAvailList').addEventListener('click', e => {
-  const btn = e.target.closest('.avail-btn');
-  if (!btn) return;
-  setAvailability(btn.dataset.vid, btn.dataset.status);
+  // Garden tab — availability toggles
+  const availBtn = e.target.closest('.avail-btn');
+  if (availBtn) {
+    setAvailability(availBtn.dataset.vid, availBtn.dataset.status);
+  }
 });
 
 await seedIfEmpty();
