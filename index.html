@@ -765,9 +765,12 @@ function openAddModal(veggieId) {
 }
 
 document.getElementById('loginBtn').onclick = () => {
-  document.getElementById('passwordGroup').style.display = 'none';
+  const prefill = currentUser || '';
+  document.getElementById('usernameInput').value = prefill;
+  document.getElementById('passwordGroup').style.display =
+    prefill.toLowerCase() === ADMIN_USER.toLowerCase() ? 'block' : 'none';
+  document.getElementById('passwordInput').value = '';
   document.getElementById('loginError').style.display = 'none';
-  document.getElementById('usernameInput').value = currentUser || '';
   document.getElementById('loginModal').classList.add('show');
 };
 document.getElementById('loginCancel').onclick = closeModals;
