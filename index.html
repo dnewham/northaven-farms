@@ -164,11 +164,9 @@
   .garden-avail-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid #e8f0d8; gap: 10px; }
   .garden-avail-row:last-child { border-bottom: none; }
   .garden-avail-name { font-family: 'Playfair Display', serif; font-size: 15px; color: #2d3a1e; font-weight: 600; }
-  .avail-toggle { display: flex; border-radius: 20px; overflow: hidden; border: 1.5px solid #c0d890; flex-shrink: 0; }
-  .avail-btn { padding: 8px 13px; font-family: 'Lato', sans-serif; font-size: 12px; font-weight: 700; border: none; background: #fff; color: #7a9a5a; cursor: pointer; min-height: 40px; }
-  .avail-btn.active-avail { background: #2d4a1e; color: #9dc854; }
-  .avail-btn.active-soon { background: #555; color: #e8e8e8; }
-  .avail-btn.active-none { background: #c0d890; color: #2d3a1e; }
+  .avail-select { padding: 9px 12px; border-radius: 10px; border: 1.5px solid #c0d890; background: #fff; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; color: #2d3a1e; cursor: pointer; -webkit-appearance: none; appearance: none; outline: none; min-height: 40px; min-width: 140px; }
+  .avail-select.val-available { border-color: #2d4a1e; background: #2d4a1e; color: #9dc854; }
+  .avail-select.val-soon { border-color: #555; background: #555; color: #e8e8e8; }
 
   /* Edit Recipe Modal */
   .btn-dash { background: #2d4a1e; border: none; color: #9dc854; padding: 9px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center; }
@@ -1033,14 +1031,15 @@ function renderGardenTab() {
   const list = document.getElementById('gardenAvailList');
   list.innerHTML = veggieData.map(v => {
     const status = veggieAvailability[v.id] || '';
+    const cls = status === 'available' ? 'val-available' : status === 'soon' ? 'val-soon' : '';
     return `
     <div class="garden-avail-row">
       <span class="garden-avail-name">${v.name}</span>
-      <div class="avail-toggle">
-        <button class="avail-btn ${!status?'active-none':''}" data-vid="${v.id}" data-status="none">None</button>
-        <button class="avail-btn ${status==='available'?'active-avail':''}" data-vid="${v.id}" data-status="available">Available</button>
-        <button class="avail-btn ${status==='soon'?'active-soon':''}" data-vid="${v.id}" data-status="soon">Coming Soon</button>
-      </div>
+      <select class="avail-select ${cls}" data-vid="${v.id}">
+        <option value="" ${!status?'selected':''}>— No designation —</option>
+        <option value="available" ${status==='available'?'selected':''}>✓ Available</option>
+        <option value="soon" ${status==='soon'?'selected':''}>⏳ Coming Soon</option>
+      </select>
     </div>`;
   }).join('');
 }
@@ -1075,11 +1074,15 @@ document.getElementById('dashView').addEventListener('click', async e => {
     }
     return;
   }
-  // Garden tab — availability toggles
-  const availBtn = e.target.closest('.avail-btn');
-  if (availBtn) {
-    setAvailability(availBtn.dataset.vid, availBtn.dataset.status);
-  }
+});
+
+// Garden tab — availability select (change event, not click)
+document.getElementById('gardenAvailList').addEventListener('change', async e => {
+  const sel = e.target.closest('.avail-select');
+  if (!sel) return;
+  await setAvailability(sel.dataset.vid, sel.value);
+  // Update select styling without full re-render
+  sel.className = 'avail-select' + (sel.value === 'available' ? ' val-available' : sel.value === 'soon' ? ' val-soon' : '');
 });
 
 await seedIfEmpty();
