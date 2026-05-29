@@ -126,6 +126,51 @@
   .toast { position: fixed; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: #2d4a1e; color: #9dc854; padding: 13px 24px; border-radius: 24px; font-size: 14px; font-weight: 700; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
 
+
+  /* COMING SOON TAG */
+  .veggie-coming-soon { position: absolute; top: 0; left: 0; right: 0; background: rgba(30,30,30,0.62); color: #e8e8e8; font-size: 10px; font-weight: 700; text-align: center; padding: 5px 0; letter-spacing: 1px; text-transform: uppercase; z-index: 3; pointer-events: none; }
+
+  /* DASHBOARD */
+  .dash-view { display: none; padding: 20px 16px; padding-bottom: max(20px, env(safe-area-inset-bottom)); max-width: 700px; margin: 0 auto; }
+  .dash-back { background: none; border: none; color: #9dc854; font-size: 14px; font-weight: 700; cursor: pointer; padding: 0; margin-bottom: 18px; display: flex; align-items: center; gap: 6px; min-height: 44px; font-family: 'Lato', sans-serif; }
+  .dash-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: #2d3a1e; margin-bottom: 20px; }
+  .dash-tabs { display: flex; gap: 8px; margin-bottom: 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+  .dash-tab { flex-shrink: 0; padding: 10px 18px; border-radius: 20px; border: 1.5px solid #c0d890; background: #fff; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; color: #5c7a3a; cursor: pointer; min-height: 44px; }
+  .dash-tab.active { background: #2d4a1e; color: #9dc854; border-color: #2d4a1e; }
+  .dash-section { display: none; }
+  .dash-section.active { display: block; }
+
+  /* Users tab */
+  .user-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid #e8f0d8; gap: 10px; }
+  .user-row:last-child { border-bottom: none; }
+  .user-info { display: flex; flex-direction: column; gap: 2px; }
+  .user-row-name { font-size: 15px; font-weight: 700; color: #2d3a1e; }
+  .user-status-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; display: inline-block; }
+  .badge-approved { background: #e0f0c8; color: #2d4a1e; }
+  .badge-pending { background: #fff3cd; color: #856404; }
+  .user-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+  /* Recipes tab */
+  .dash-filter { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1.5px solid #c0d890; background: #fff; font-family: 'Lato', sans-serif; font-size: 15px; color: #2d3a1e; margin-bottom: 16px; -webkit-appearance: none; outline: none; }
+  .dash-recipe-row { background: #fff; border-radius: 12px; border: 1.5px solid #d8e8c0; padding: 14px 16px; margin-bottom: 10px; }
+  .dash-recipe-name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 600; color: #2d3a1e; margin-bottom: 2px; }
+  .dash-recipe-meta { font-size: 11px; color: #7a9a5a; margin-bottom: 10px; }
+  .dash-recipe-actions { display: flex; gap: 8px; }
+  .btn-edit { background: #f0f4e8; color: #2d4a1e; border: 1.5px solid #c0d890; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; min-height: 40px; }
+  .btn-delete { background: transparent; color: #c05030; border: 1.5px solid #c05030; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; min-height: 40px; }
+
+  /* Garden tab */
+  .garden-avail-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid #e8f0d8; gap: 10px; }
+  .garden-avail-row:last-child { border-bottom: none; }
+  .garden-avail-name { font-family: 'Playfair Display', serif; font-size: 15px; color: #2d3a1e; font-weight: 600; }
+  .avail-toggle { display: flex; border-radius: 20px; overflow: hidden; border: 1.5px solid #c0d890; flex-shrink: 0; }
+  .avail-btn { padding: 8px 13px; font-family: 'Lato', sans-serif; font-size: 12px; font-weight: 700; border: none; background: #fff; color: #7a9a5a; cursor: pointer; min-height: 40px; }
+  .avail-btn.active-avail { background: #2d4a1e; color: #9dc854; }
+  .avail-btn.active-soon { background: #555; color: #e8e8e8; }
+
+  /* Edit Recipe Modal */
+  .btn-dash { background: #2d4a1e; border: none; color: #9dc854; padding: 9px 16px; border-radius: 20px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+
   @media (min-width: 600px) {
     .app-header { padding: 18px 28px; }
     .app-title { font-size: 20px; }
@@ -144,6 +189,7 @@
   <div class="app-title">Northaven Farms <span>Recipe Book</span></div>
   <div class="header-actions">
     <button class="btn-outline" id="loginBtn">Sign In</button>
+    <button class="btn-dash" id="dashBtn" style="display:none;">🌾 Dashboard</button>
     <button class="btn-primary" id="addBtn">+ Add Recipe</button>
   </div>
 </div>
@@ -234,6 +280,64 @@
     <div class="modal-actions">
       <button class="btn-cancel" id="addCancel">Cancel</button>
       <button class="btn-submit" id="addSubmit">Share Recipe</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Dashboard View -->
+<div class="dash-view" id="dashView">
+  <button class="dash-back" id="dashBackBtn">&#8592; Back to Garden</button>
+  <div class="dash-title">🌾 Admin Dashboard</div>
+  <div class="dash-tabs">
+    <button class="dash-tab active" data-tab="users">👥 Users</button>
+    <button class="dash-tab" data-tab="recipes">📋 Recipes</button>
+    <button class="dash-tab" data-tab="garden">🥦 Garden</button>
+  </div>
+
+  <!-- Users -->
+  <div class="dash-section active" id="dashUsers">
+    <div id="userList"><p style="font-size:13px;color:#7a9a5a;">Loading...</p></div>
+  </div>
+
+  <!-- Recipes -->
+  <div class="dash-section" id="dashRecipes">
+    <select class="dash-filter" id="dashVeggieFilter">
+      <option value="">All Vegetables</option>
+    </select>
+    <div id="recipeList"><p style="font-size:13px;color:#7a9a5a;">Loading...</p></div>
+  </div>
+
+  <!-- Garden availability -->
+  <div class="dash-section" id="dashGarden">
+    <div id="gardenAvailList"><p style="font-size:13px;color:#7a9a5a;">Loading...</p></div>
+  </div>
+</div>
+
+<!-- Edit Recipe Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3>✏️ Edit Recipe</h3>
+    <div class="form-group">
+      <label>Recipe Name</label>
+      <input type="text" id="editName"/>
+    </div>
+    <div class="form-group" id="editUrlGroup">
+      <label>Recipe URL</label>
+      <input type="url" id="editUrl" inputmode="url"/>
+    </div>
+    <div class="form-group" id="editNotesGroup">
+      <label>Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#9aaa8a;font-size:11px;">(optional)</span></label>
+      <textarea id="editNotes" style="height:80px;"></textarea>
+    </div>
+    <div class="form-group" id="editTextGroup" style="display:none;">
+      <label>Recipe Text</label>
+      <textarea id="editText"></textarea>
+    </div>
+    <input type="hidden" id="editRecipeId"/>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="editCancel">Cancel</button>
+      <button class="btn-submit" id="editSave">Save Changes</button>
     </div>
   </div>
 </div>
@@ -480,6 +584,23 @@ async function loadRecipes() {
   if (activeVeggieId) openDetail(activeVeggieId);
 }
 
+
+let veggieAvailability = {}; // id -> 'available' | 'soon'
+
+async function loadAvailability() {
+  try {
+    const snap = await getDocs(collection(db, 'availability'));
+    snap.forEach(d => { veggieAvailability[d.id] = d.data().status || 'available'; });
+  } catch(e) {}
+}
+
+async function setAvailability(veggieId, status) {
+  await setDoc(doc(db, 'availability', veggieId), { status });
+  veggieAvailability[veggieId] = status;
+  renderGrid();
+  renderGardenTab();
+}
+
 function renderGrid() {
   const grid = document.getElementById('veggieGrid');
   grid.innerHTML = veggieData.map(v => {
@@ -489,6 +610,7 @@ function renderGrid() {
         <div class="veggie-photo-wrap">
           <img class="veggie-photo" src="${v.img}" alt="${v.name}" loading="lazy" onerror="this.style.display='none'"/>
           ${count > 0 ? `<div class="veggie-badge">${count} recipe${count>1?'s':''}</div>` : ''}
+          ${veggieAvailability[v.id]==='soon' ? '<div class="veggie-coming-soon">Coming Soon</div>' : ''}
         </div>
         <div class="veggie-info">
           <div class="veggie-name">${v.name}</div>
@@ -670,6 +792,8 @@ document.getElementById('loginSubmit').onclick = async () => {
     currentUser = ADMIN_USER; isAdmin = true;
     localStorage.setItem('nf_username', ADMIN_USER); localStorage.setItem('nf_admin', '1');
     document.getElementById('loginBtn').textContent = '🌾 Denton';
+    document.getElementById('dashBtn').style.display = 'flex';
+    document.getElementById('addBtn').style.display = 'none';
     closeModals(); showToast('Welcome back, Denton!'); return;
   }
 
@@ -754,13 +878,176 @@ async function restoreSession() {
   const savedAdmin = localStorage.getItem('nf_admin');
   if (!savedUser) return;
   currentUser = savedUser;
-  if (savedAdmin) { isAdmin=true; document.getElementById('loginBtn').textContent='🌾 Denton'; return; }
+  if (savedAdmin) { isAdmin=true; document.getElementById('loginBtn').textContent='🌾 Denton'; document.getElementById('dashBtn').style.display='flex'; document.getElementById('addBtn').style.display='none'; return; }
   const userSnap = await getDoc(doc(db, 'users', savedUser.toLowerCase()));
   const status = userSnap.exists() ? userSnap.data().status : 'pending';
   document.getElementById('loginBtn').textContent = status==='approved' ? '👤 '+savedUser : '👤 '+savedUser+' (pending)';
 }
 
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────
+function openDashboard() {
+  document.getElementById('gardenView').style.display = 'none';
+  document.getElementById('detailView').style.display = 'none';
+  document.getElementById('dashView').style.display = 'block';
+  renderUsersTab();
+  renderRecipesTab();
+  renderGardenTab();
+}
+
+document.getElementById('dashBackBtn').onclick = () => {
+  document.getElementById('dashView').style.display = 'none';
+  document.getElementById('gardenView').style.display = 'block';
+};
+
+document.getElementById('dashBtn').onclick = openDashboard;
+
+// Tab switching
+document.querySelectorAll('.dash-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('dash' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1)).classList.add('active');
+  });
+});
+
+// ── USERS TAB ──────────────────────────────────────────────────────────────
+async function renderUsersTab() {
+  const list = document.getElementById('userList');
+  list.innerHTML = '<p style="font-size:13px;color:#7a9a5a;">Loading...</p>';
+  const snap = await getDocs(collection(db, 'users'));
+  const users = [];
+  snap.forEach(d => users.push({id: d.id, ...d.data()}));
+  if (users.length === 0) { list.innerHTML = '<p style="font-size:13px;color:#7a9a5a;">No users yet.</p>'; return; }
+  // Sort: pending first, then approved
+  users.sort((a,b) => {
+    if (a.status === b.status) return (a.username||'').localeCompare(b.username||'');
+    return a.status === 'pending' ? -1 : 1;
+  });
+  list.innerHTML = users.map(u => `
+    <div class="user-row">
+      <div class="user-info">
+        <span class="user-row-name">${u.username}</span>
+        <span class="user-status-badge ${u.status==='approved'?'badge-approved':'badge-pending'}">${u.status==='approved'?'✓ Approved':'⏳ Pending'}</span>
+      </div>
+      <div class="user-actions">
+        ${u.status==='pending' ? `<button class="btn-approve" data-uid="${u.id}" data-uname="${u.username}" onclick="approveUser(this)">Approve</button>` : ''}
+        <button class="btn-deny" data-uid="${u.id}" data-uname="${u.username}" onclick="removeUser(this)">${u.status==='pending'?'Deny':'Revoke'}</button>
+      </div>
+    </div>`).join('');
+}
+
+window.approveUser = async (btn) => {
+  await setDoc(doc(db,'users',btn.dataset.uid),{username:btn.dataset.uname,status:'approved'});
+  showToast(`${btn.dataset.uname} approved!`);
+  renderUsersTab();
+};
+window.removeUser = async (btn) => {
+  if (!confirm(`Remove user "${btn.dataset.uname}"?`)) return;
+  await deleteDoc(doc(db,'users',btn.dataset.uid));
+  showToast('User removed.');
+  renderUsersTab();
+};
+
+// ── RECIPES TAB ────────────────────────────────────────────────────────────
+async function renderRecipesTab(filterVeggieId='') {
+  const list = document.getElementById('recipeList');
+  list.innerHTML = '<p style="font-size:13px;color:#7a9a5a;">Loading...</p>';
+
+  // Populate filter dropdown if needed
+  const filterEl = document.getElementById('dashVeggieFilter');
+  if (filterEl.options.length === 1) {
+    veggieData.forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.id; o.textContent = v.name;
+      filterEl.appendChild(o);
+    });
+    filterEl.onchange = () => renderRecipesTab(filterEl.value);
+  }
+
+  const snap = await getDocs(query(collection(db, 'recipes'), orderBy('createdAt')));
+  const recipes = [];
+  snap.forEach(d => { const r={id:d.id,...d.data()}; if (!filterVeggieId || r.veggieId===filterVeggieId) recipes.push(r); });
+
+  if (recipes.length === 0) { list.innerHTML = '<p style="font-size:13px;color:#7a9a5a;">No recipes found.</p>'; return; }
+
+  const veggieMap = {};
+  veggieData.forEach(v => veggieMap[v.id] = v.name);
+
+  list.innerHTML = recipes.map(r => `
+    <div class="dash-recipe-row">
+      <div class="dash-recipe-name">${r.name}</div>
+      <div class="dash-recipe-meta">${veggieMap[r.veggieId]||r.veggieId} · ${r.by}${r.url ? ' · 🔗 Link' : ' · ✏️ Text'}</div>
+      <div class="dash-recipe-actions">
+        <button class="btn-edit" onclick="openEditRecipe('${r.id}')">Edit</button>
+        <button class="btn-delete" onclick="deleteRecipe('${r.id}','${r.name.replace(/'/g,"\'")}')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+window.deleteRecipe = async (id, name) => {
+  if (!confirm(`Delete "${name}"?`)) return;
+  await deleteDoc(doc(db,'recipes',id));
+  showToast('Recipe deleted.');
+  await loadRecipes();
+  renderRecipesTab(document.getElementById('dashVeggieFilter').value);
+};
+
+window.openEditRecipe = async (id) => {
+  const snap = await getDoc(doc(db,'recipes',id));
+  if (!snap.exists()) return;
+  const r = snap.data();
+  document.getElementById('editRecipeId').value = id;
+  document.getElementById('editName').value = r.name || '';
+  document.getElementById('editUrl').value = r.url || '';
+  document.getElementById('editNotes').value = r.notes || '';
+  document.getElementById('editText').value = r.text || '';
+  const isLink = !!r.url || !r.text;
+  document.getElementById('editUrlGroup').style.display = isLink ? 'block' : 'none';
+  document.getElementById('editNotesGroup').style.display = isLink ? 'block' : 'none';
+  document.getElementById('editTextGroup').style.display = isLink ? 'none' : 'block';
+  document.getElementById('editModal').classList.add('show');
+};
+
+document.getElementById('editCancel').onclick = () => closeModals();
+document.getElementById('editSave').onclick = async () => {
+  const id = document.getElementById('editRecipeId').value;
+  const snap = await getDoc(doc(db,'recipes',id));
+  const existing = snap.data();
+  const isLink = !!existing.url || !existing.text;
+  const updates = { name: document.getElementById('editName').value.trim() };
+  if (isLink) {
+    updates.url = document.getElementById('editUrl').value.trim();
+    updates.notes = document.getElementById('editNotes').value.trim();
+  } else {
+    updates.text = document.getElementById('editText').value.trim();
+  }
+  await setDoc(doc(db,'recipes',id), {...existing, ...updates});
+  showToast('Recipe updated!');
+  closeModals();
+  await loadRecipes();
+  renderRecipesTab(document.getElementById('dashVeggieFilter').value);
+};
+
+// ── GARDEN TAB ─────────────────────────────────────────────────────────────
+function renderGardenTab() {
+  const list = document.getElementById('gardenAvailList');
+  list.innerHTML = veggieData.map(v => {
+    const status = veggieAvailability[v.id] || 'available';
+    return `
+    <div class="garden-avail-row">
+      <span class="garden-avail-name">${v.name}</span>
+      <div class="avail-toggle">
+        <button class="avail-btn ${status==='available'?'active-avail':''}" onclick="setAvailability('${v.id}','available')">Available</button>
+        <button class="avail-btn ${status==='soon'?'active-soon':''}" onclick="setAvailability('${v.id}','soon')">Coming Soon</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 await seedIfEmpty();
+await loadAvailability();
 await restoreSession();
 await loadRecipes();
 </script>
