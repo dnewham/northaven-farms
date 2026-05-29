@@ -236,7 +236,7 @@
       <label>Password</label>
       <input type="password" id="passwordInput" placeholder="Enter password"/>
     </div>
-    <p style="font-size:13px;color:#7a9a5a;margin-bottom:12px;line-height:1.5;">You can browse anonymously, but a username is required to add recipes. New usernames need Denton's approval.</p>
+    <p id="loginHelperText" style="font-size:13px;color:#7a9a5a;margin-bottom:12px;line-height:1.5;">You can browse anonymously, but a username is required to add recipes. New usernames need Denton's approval.</p>
     <div id="loginError" style="display:none;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:12px;line-height:1.5;"></div>
     <div class="modal-actions">
       <button class="btn-cancel" id="loginCancel">Browse anonymously</button>
@@ -766,19 +766,23 @@ function openAddModal(veggieId) {
 
 document.getElementById('loginBtn').onclick = () => {
   const prefill = currentUser || '';
+  const isDenton = prefill.toLowerCase() === ADMIN_USER.toLowerCase();
   document.getElementById('usernameInput').value = prefill;
-  document.getElementById('passwordGroup').style.display =
-    prefill.toLowerCase() === ADMIN_USER.toLowerCase() ? 'block' : 'none';
+  document.getElementById('passwordGroup').style.display = isDenton ? 'block' : 'none';
   document.getElementById('passwordInput').value = '';
   document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginHelperText').style.display = isDenton ? 'none' : 'block';
+  document.getElementById('loginCancel').style.display = isDenton ? 'none' : '';
   document.getElementById('loginModal').classList.add('show');
 };
 document.getElementById('loginCancel').onclick = closeModals;
 document.getElementById('addCancel').onclick = closeModals;
 
 document.getElementById('usernameInput').addEventListener('input', function() {
-  document.getElementById('passwordGroup').style.display =
-    this.value.trim().toLowerCase() === ADMIN_USER.toLowerCase() ? 'block' : 'none';
+  const isDenton = this.value.trim().toLowerCase() === ADMIN_USER.toLowerCase();
+  document.getElementById('passwordGroup').style.display = isDenton ? 'block' : 'none';
+  document.getElementById('loginHelperText').style.display = isDenton ? 'none' : 'block';
+  document.getElementById('loginCancel').style.display = isDenton ? 'none' : '';
 });
 
 document.getElementById('loginSubmit').onclick = async () => {
